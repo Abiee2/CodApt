@@ -1,0 +1,92 @@
+@tailwindcss;
+
+/* ============================================
+   CSS VARIABLES FOR DARK/LIGHT MODE
+   ============================================ */
+
+/* Light Mode (Default) */
+:root {
+  --bg-primary: #89CFF0;
+  --bg-navbar: #ffffff;
+  --text-primary: #000000;
+  --text-title: #FFD700;
+  --card-bg: #1e4baf;
+  --card-hover: #153a8a;
+  --border-color: #0d2a6b;
+  --modal-bg: #1e4baf;
+  --modal-border: #0d2a6b;
+
+
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+  --bg-primary: #1a1a2e;
+  --bg-navbar: #16213e;
+  --text-primary: #ffffff;
+  --text-title: #FFD700;
+  --card-bg: #0d2a6b;
+  --card-hover: #1e4baf;
+  --border-color: #3366cc;
+  --modal-bg: #0d2a6b;
+  --modal-border: #3366cc;
+
+
+}
+
+
+/* ============================================
+   LANDING PAGE DARK/LIGHT MODE
+   ============================================ */
+
+/* Light Mode */
+:root,
+[data-theme="light"] {
+  --navbar-bg: #ffffff;
+  --navbar-border: #e0e0e0;
+  --title-color: #1e3a5f;
+  --subtitle-color: #2b4c7e;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+  --navbar-bg: #111727;
+  --navbar-border: #1e2d4a;
+  --title-color: #ffffff;
+  --subtitle-color: #a0aec0;
+}
+
+
+/* ============================================
+   REST OF YOUR CSS
+   ============================================ */
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+/* Full viewport */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.monaco-editor, .overflow-guard {
+  border-radius: 0 0 8px 8px;
+}

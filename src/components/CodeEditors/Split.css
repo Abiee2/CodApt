@@ -1,0 +1,59 @@
+/* Reset and base styles */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Split container */
+.split {
+  display: flex !important;
+  flex-direction: row !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* All children of split */
+.split > * {
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden;
+}
+
+/* Horizontal gutter (left ↔ right) */
+.gutter.gutter-horizontal {
+  background-color: #1e3a8a !important;
+  cursor: col-resize !important;
+  width: 12px !important;
+  min-width: 12px !important;
+  z-index: 100 !important;
+  background-image: none !important;
+  transition: background-color 0.2s;
+}
+
+.gutter.gutter-horizontal:hover {
+  background-color: #2563eb !important;
+}
+
+/* Vertical gutter (top ↔ bottom) */
+.gutter.gutter-vertical {
+  background-color: #1e3a8a !important;
+  cursor: row-resize !important;
+  height: 12px !important;
+  min-height: 12px !important;
+  z-index: 100 !important;
+  background-image: none !important;
+  transition: background-color 0.2s;
+}
+
+.gutter.gutter-vertical:hover {
+  background-color: #2563eb !important;
+}
+
+/* Add to Split.css - for profile dropdown hover */
+div[style*="position: relative"]:hover .profile-dropdown {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}

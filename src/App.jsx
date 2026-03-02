@@ -6,6 +6,7 @@ import ProfilePage from './components/Profile/ProfilePage';
 import LandingPage from './components/LandingPage/LandingPage';
 import SignUp from './components/LogIn/SignUp';
 import Login from './components/LogIn/Login';
+import AdminDashboard from './components/Admin-Dashboard/AdminDashboard';
 import './App.css';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('landing');
   const [selectedLang, setSelectedLang] = useState(null);
   const [selectedConcept, setSelectedConcept] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   
   // User data with profile photo
   const [userData, setUserData] = useState({
@@ -41,18 +43,7 @@ function App() {
   const goToLogin = () => setCurrentPage('login');
   const goToLanguages = () => setCurrentPage('languages');
   const goToProfile = () => setCurrentPage('profile');
-
-  // Handle Google login - get user photo
-  const handleGoogleLogin = (googleUser) => {
-    setUserData({
-      name: googleUser.name || 'User',
-      username: googleUser.email?.split('@')[0] || 'user',
-      email: googleUser.email || '',
-      password: 'google-oauth',
-      photo: googleUser.picture || null  // Google profile photo
-    });
-    setCurrentPage('languages');
-  };
+  const goToAdmin = () => setCurrentPage('admin');
 
   // Landing Page
   if (currentPage === 'landing') {
@@ -62,6 +53,7 @@ function App() {
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
         onSignUp={goToSignUp}
+        onLogin={goToLogin}
       />
     );
   }
@@ -88,12 +80,27 @@ function App() {
       <Login 
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
-        onLogin={(userData) => {
-          setUserData(userData);
-          goToLanguages();
+        onLogin={(loginData) => {
+          if (loginData && loginData.isAdmin) {
+            setIsAdmin(true);
+            goToAdmin();
+          } else {
+            setUserData(loginData || userData);
+            goToLanguages();
+          }
         }}
         onSignUp={goToSignUp}
         onHome={goToLanding}
+      />
+    );
+  }
+
+  // Admin Dashboard Page
+  if (currentPage === 'admin') {
+    return (
+      <AdminDashboard 
+        isDarkMode={isDarkMode}
+        toggleTheme={toggleTheme}
       />
     );
   }

@@ -6,6 +6,12 @@ const Login = ({ isDarkMode, toggleTheme, onLogin, onSignUp, onHome }) => {
     email: '',
     password: ''
   });
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [adminFormData, setAdminFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [adminError, setAdminError] = useState('');
 
   useEffect(() => {
     // Load Google Identity Services
@@ -53,6 +59,17 @@ const Login = ({ isDarkMode, toggleTheme, onLogin, onSignUp, onHome }) => {
     onLogin();
   };
 
+  const handleAdminSubmit = (e) => {
+    e.preventDefault();
+    // Admin credentials check
+    if (adminFormData.email === 'admin@codapt.com' && adminFormData.password === 'admin123') {
+      setAdminError('');
+      onLogin({ isAdmin: true });
+    } else {
+      setAdminError('Invalid admin credentials');
+    }
+  };
+
   return (
     <div className={styles.container}>
       {/* Navbar */}
@@ -65,6 +82,12 @@ const Login = ({ isDarkMode, toggleTheme, onLogin, onSignUp, onHome }) => {
         />
         
         <div className={styles.navRight}>
+          <button 
+            onClick={onSignUp}
+            className={styles.signUpBtn}
+          >
+            Sign Up
+          </button>
           <button 
             onClick={toggleTheme}
             className={styles.themeToggle}
@@ -83,42 +106,82 @@ const Login = ({ isDarkMode, toggleTheme, onLogin, onSignUp, onHome }) => {
             className={styles.welcomeImage} 
           />
           
-          <form className={styles.form} onSubmit={handleSubmit}>
-            <input 
-              type="email" 
-              placeholder="Email" 
-              className={styles.inputField}
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              required
-            />
-            <input 
-              type="password" 
-              placeholder="Password" 
-              className={styles.inputField}
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              required
-            />
-            
-            <button type="submit" className={styles.submitBtn}>
-              Login
-            </button>
-          </form>
+          {showAdminLogin ? (
+            // Admin Login Form
+            <form className={styles.form} onSubmit={handleAdminSubmit}>
+              <p style={{ color: '#ff6b6b', marginBottom: '10px', fontSize: '14px' }}>Login</p>
+              <input 
+                type="email" 
+                placeholder="Admin Email" 
+                className={styles.inputField}
+                value={adminFormData.email}
+                onChange={(e) => setAdminFormData({ ...adminFormData, email: e.target.value })}
+                required
+              />
+              <input 
+                type="password" 
+                placeholder="Admin Password" 
+                className={styles.inputField}
+                value={adminFormData.password}
+                onChange={(e) => setAdminFormData({ ...adminFormData, password: e.target.value })}
+                required
+              />
+              {adminError && <p style={{ color: '#ff6b6b', fontSize: '12px', marginBottom: '10px' }}>{adminError}</p>}
+              <button type="submit" className={styles.submitBtn}>
+                Login
+              </button>
+              <p className={styles.footerText}>
+                <span className={styles.link} onClick={() => setShowAdminLogin(false)}>Back to User Login</span>
+              </p>
+            </form>
+          ) : (
+            // Regular User Login Form
+            <>
+              <form className={styles.form} onSubmit={handleSubmit}>
+                <input 
+                  type="email" 
+                  placeholder="Email" 
+                  className={styles.inputField}
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
+                />
+                <input 
+                  type="password" 
+                  placeholder="Password" 
+                  className={styles.inputField}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  required
+                />
+                
+                <button type="submit" className={styles.submitBtn}>
+                  Login
+                </button>
+              </form>
 
-          <p className={styles.footerText}>
-            Already have an Account? <span className={styles.link} onClick={onSignUp}>Sign Up</span>
-          </p>
+              <p className={styles.footerText}>
+                Already have an Account? <span className={styles.link} onClick={onSignUp}>Sign Up</span>
+              </p>
 
-          {/* Google Button */}
-          <button className={styles.googleBtn} onClick={handleGoogleClick}>
-            <img 
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
-              width="18" 
-              alt="G" 
-            />
-            Google
-          </button>
+              {/* Google Button */}
+              <button className={styles.googleBtn} onClick={handleGoogleClick}>
+                <img 
+                  src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
+                  width="18" 
+                  alt="G" 
+                />
+                Google
+              </button>
+
+              <hr style={{ marginTop: '20px', border: 'none', borderTop: '1px solid #ddd' }} />
+
+              {/* Admin Login Link */}
+              <p className={styles.footerText} style={{ marginTop: '15px' }}>
+                Are you an admin? <button className={styles.link} onClick={() => setShowAdminLogin(true)}>Login here</button>
+              </p>
+            </>
+          )}
         </div>
       </main>
     </div>

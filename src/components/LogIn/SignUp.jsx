@@ -91,6 +91,12 @@ const SignUp = ({ isDarkMode, toggleTheme, onSignUp, onLogin, onHome }) => {
         
         <div className={styles.navRight}>
           <button 
+            onClick={onLogin}
+            className={styles.signUpBtn}
+          >
+            Login
+          </button>
+          <button 
             onClick={toggleTheme}
             className={styles.themeToggle}
           >

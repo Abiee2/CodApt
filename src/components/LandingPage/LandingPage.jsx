@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './LandingPage.module.css';
 
-const LandingPage = ({ onGetStarted, isDarkMode, toggleTheme, onSignUp }) => {
+const LandingPage = ({ onGetStarted, isDarkMode, toggleTheme, onSignUp, onLogin }) => {
   return (
     <div className={styles.container}>
       {/* Navigation */}
@@ -19,6 +19,13 @@ const LandingPage = ({ onGetStarted, isDarkMode, toggleTheme, onSignUp }) => {
             title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
             {isDarkMode ? '☀️' : '🌙'}
+          </button>
+          
+          <button 
+            onClick={onLogin}
+            className={styles.signInBtn}
+          >
+            Log In
           </button>
           
           <button 

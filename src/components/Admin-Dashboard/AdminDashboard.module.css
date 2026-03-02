@@ -1,0 +1,246 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #87CEFA;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #0D213F;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.logo {
+  padding: 8px;
+  background: white;
+  text-align: center;
+}
+
+.logo img {
+  max-width: 100%;
+  height: auto;
+  max-height: 40px;
+}
+
+.sideNav {
+  padding: 20px 0;
+}
+
+.navItem {
+  padding: 15px 25px;
+  cursor: pointer;
+  color: #B0C4DE;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navItem.active {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.topHeader {
+  height: 60px;
+  background: white;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 40px;
+  flex-shrink: 0;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.adminBadge {
+  background: #FFD700;
+  padding: 4px 15px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.content {
+  padding: 30px 40px 40px 40px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.statCard {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.statEmoji { font-size: 40px; display: block; margin-bottom: 10px; }
+
+.statCard p { font-weight: bold; color: #333; margin: 0; font-size: 18px; }
+
+.statCard h3 { font-size: 40px; margin: 10px 0 0; color: #111; }
+
+.activityCard {
+  background-color: #244C91;
+  border-radius: 20px;
+  padding: 30px;
+  border: 2px solid white;
+}
+
+.activityTitle {
+  color: white;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.activityTable {
+  background: #D9E2F3;
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  color: #244C91;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.userRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.userName { font-weight: 600; color: #333; }
+
+.progressWrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 40%;
+}
+
+.progressBar {
+  flex: 1;
+  background: #C4C4C4;
+  height: 12px;
+  border-radius: 6px;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 6px;
+}
+
+.progressVal {
+    font-weight: bold;
+    min-width: 40px;
+}
+
+.actionArea {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.viewAllBtn {
+  background: #FFD700;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Dark Mode Styles */
+[data-theme="dark"] .container {
+  background-color: #1a1a2e;
+}
+
+[data-theme="dark"] .topHeader {
+  background: #16213e;
+}
+
+[data-theme="dark"] .content {
+  background-color: #1a1a2e;
+}
+
+[data-theme="dark"] .statCard {
+  background: #16213e;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .statCard p {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .statCard h3 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .activityCard {
+  background-color: #16213e;
+  border-color: #0f3460;
+}
+
+[data-theme="dark"] .activityTable {
+  background: #0f3460;
+}
+
+[data-theme="dark"] .tableHeader {
+  color: #87CEFA;
+}
+
+[data-theme="dark"] .userName {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .progressBar {
+  background: #0f3460;
+}
+
+[data-theme="dark"] .logo {
+  background: #16213e;
+}

@@ -1,0 +1,775 @@
+.usersPanelWrapper {
+    padding: 0px 20px 40px 20px;
+    background-color: #87CEFA;
+    height: 100vh;
+}
+
+.panelTitle {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.searchContainer {
+    background: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.searchInput {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.statsSummary {
+    display: flex;
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.statBox {
+    flex: 1;
+}
+
+.statBox:first-child {
+    border-right: 1px solid #ddd;
+}
+
+.activityCard {
+    background-color: #2D58A6;
+    border-radius: 20px;
+    padding: 15px;
+    color: white;
+}
+
+.activityHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.activityHeader h3 {
+    margin: 0;
+    color: white;
+}
+
+.pagination {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.pagination span {
+    color: white;
+    cursor: pointer;
+    padding: 8px 14px;
+    border: 1px solid white;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.pagination span:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.nextBtn {
+    background: #FFD700;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.tableScrollArea {
+    background: #E8F1FC;
+    border-radius: 15px;
+}
+
+.userTable {
+    width: 100%;
+    border-collapse: collapse;
+    color: #333;
+}
+
+.userTable th {
+    background: #2D58A6;
+    color: white;
+    padding: 15px;
+    text-align: left;
+}
+
+.userTable th:nth-child(3),
+.userTable th:nth-child(4),
+.userTable th:nth-child(5) {
+    text-align: center;
+}
+
+.userTable td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.userTable td:nth-child(3),
+.userTable td:nth-child(4),
+.userTable td:nth-child(5) {
+    text-align: center;
+}
+
+.progressCell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progressTrack {
+    width: 200px;
+    height: 12px;
+    background: #D9D9D9;
+    border-radius: 10px;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    border-radius: 10px;
+}
+
+.progressText {
+    font-weight: bold;
+    min-width: 40px;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.userCell {
+    display: flex;
+    align-items: center;
+}
+
+/* View Button Styles */
+.viewBtn {
+    background: #2D58A6;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+.viewBtn:hover {
+    background: #1e3d7a;
+}
+
+/* Details Panel Styles */
+.detailsPanel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.detailsPanelContent {
+    padding: 20px;
+}
+
+.detailsPanelHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.detailsPanelHeader h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #666;
+    line-height: 1;
+}
+
+.closeBtn:hover {
+    color: #333;
+}
+
+.userProfileSection {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.userAvatarLarge {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0 auto 15px;
+}
+
+.userProfileSection h3 {
+    margin: 0 0 5px;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.userProfileSection p {
+    margin: 0;
+    color: #666;
+}
+
+.detailsSection {
+    margin-bottom: 25px;
+}
+
+.detailsSection h4 {
+    margin: 0 0 10px;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.progressBarLarge {
+    width: 100%;
+    height: 20px;
+    background: #D9D9D9;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progressFillLarge {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.progressPercentage {
+    text-align: center;
+    margin: 8px 0 0;
+    font-weight: bold;
+    color: #333;
+}
+
+.scoresGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.scoreItem {
+    background: #f5f5f5;
+    padding: 15px 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.scoreLabel {
+    display: block;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.scoreValue {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #2D58A6;
+}
+
+.statsList {
+    background: #f5f5f5;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.statItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.statItem:last-child {
+    border-bottom: none;
+}
+
+.statItem span:first-child {
+    color: #666;
+}
+
+.statItem span:last-child {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Status Badges */
+.statusBadge {
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.activeStatus {
+    background: #d4edda;
+    color: #155724;
+}
+
+.bannedStatus {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.bannedRow {
+    opacity: 0.7;
+}
+
+/* Action Buttons in Details Panel */
+.actionButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.editUserBtn, .resetPasswordBtn, .banUserBtn, .unbanUserBtn, .deleteUserBtn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.editUserBtn {
+    background: #2D58A6;
+    color: white;
+}
+
+.editUserBtn:hover {
+    background: #1e3d7a;
+}
+
+.resetPasswordBtn {
+    background: #F1C40F;
+    color: #333;
+}
+
+.resetPasswordBtn:hover {
+    background: #d4ac0d;
+}
+
+.banUserBtn {
+    background: #E74C3C;
+    color: white;
+}
+
+.banUserBtn:hover {
+    background: #c0392b;
+}
+
+.unbanUserBtn {
+    background: #27AE60;
+    color: white;
+}
+
+.unbanUserBtn:hover {
+    background: #1e8449;
+}
+
+.deleteUserBtn {
+    background: #922B21;
+    color: white;
+}
+
+.deleteUserBtn:hover {
+    background: #7b241c;
+}
+
+/* Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modalContent {
+    background: white;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 450px;
+    overflow: hidden;
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #2D58A6;
+    color: white;
+}
+
+.modalHeader h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.modalHeader .closeBtn {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.modalHeader .closeBtn:hover {
+    color: #ddd;
+}
+
+.modalBody {
+    padding: 25px 20px;
+}
+
+.modalBody p {
+    margin: 0;
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.modalFooter {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding: 15px 20px;
+    background: #f5f5f5;
+}
+
+.cancelBtn {
+    padding: 10px 20px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+.cancelBtn:hover {
+    background: #5a6268;
+}
+
+.saveBtn {
+    padding: 10px 20px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+.saveBtn:hover {
+    background: #218838;
+}
+
+.confirmBtn {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.deleteConfirmBtn {
+    background: #dc3545;
+}
+
+.deleteConfirmBtn:hover {
+    background: #c82333;
+}
+
+.banConfirmBtn {
+    background: #E74C3C;
+}
+
+.banConfirmBtn:hover {
+    background: #c0392b;
+}
+
+.unbanConfirmBtn {
+    background: #27AE60;
+}
+
+.unbanConfirmBtn:hover {
+    background: #1e8449;
+}
+
+.resetConfirmBtn {
+    background: #F1C40F;
+    color: #333;
+}
+
+.resetConfirmBtn:hover {
+    background: #d4ac0d;
+}
+
+/* Form Styles */
+.formGroup {
+    margin-bottom: 15px;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: 500;
+}
+
+.formGroup .inputField {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.formGroup .inputField:focus {
+    outline: none;
+    border-color: #2D58A6;
+}
+
+/* Dark Mode Styles */
+[data-theme="dark"] .usersPanelWrapper {
+    background-color: #1a1a2e;
+}
+
+[data-theme="dark"] .panelTitle {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .searchContainer {
+    background: #16213e;
+}
+
+[data-theme="dark"] .searchInput {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .statsSummary {
+    background: #16213e;
+}
+
+[data-theme="dark"] .statBox {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .statBox:first-child {
+    border-right-color: #0f3460;
+}
+
+[data-theme="dark"] .activityCard {
+    background-color: #16213e;
+}
+
+[data-theme="dark"] .tableScrollArea {
+    background: #0f3460;
+}
+
+[data-theme="dark"] .userTable {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .userTable th {
+    background: #0f3460;
+}
+
+[data-theme="dark"] .userTable td {
+    border-bottom-color: #0f3460;
+}
+
+[data-theme="dark"] .progressTrack {
+    background: #0f3460;
+}
+
+/* Dark Mode for Details Panel */
+[data-theme="dark"] .detailsPanel {
+    background: #16213e;
+}
+
+[data-theme="dark"] .detailsPanelHeader {
+    border-bottom-color: #0f3460;
+}
+
+[data-theme="dark"] .detailsPanelHeader h2 {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .closeBtn {
+    color: #aaa;
+}
+
+[data-theme="dark"] .closeBtn:hover {
+    color: #fff;
+}
+
+[data-theme="dark"] .userProfileSection h3 {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .userProfileSection p {
+    color: #aaa;
+}
+
+[data-theme="dark"] .detailsSection h4 {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .progressBarLarge {
+    background: #0f3460;
+}
+
+[data-theme="dark"] .progressPercentage {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .scoreItem {
+    background: #0f3460;
+}
+
+[data-theme="dark"] .scoreLabel {
+    color: #aaa;
+}
+
+[data-theme="dark"] .scoreValue {
+    color: #76D7A4;
+}
+
+[data-theme="dark"] .statsList {
+    background: #0f3460;
+}
+
+[data-theme="dark"] .statItem {
+    border-bottom-color: #16213e;
+}
+
+[data-theme="dark"] .statItem span:first-child {
+    color: #aaa;
+}
+
+[data-theme="dark"] .statItem span:last-child {
+    color: #e0e0e0;
+}
+
+/* Dark Mode for Modal and Action Buttons */
+[data-theme="dark"] .modalContent {
+    background: #16213e;
+}
+
+[data-theme="dark"] .modalBody p {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .modalFooter {
+    background: #0f3460;
+}
+
+[data-theme="dark"] .formGroup label {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .formGroup .inputField {
+    background: #0f3460;
+    border-color: #1a1a2e;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .actionButtons {
+    border-top-color: #0f3460;
+}
+
+[data-theme="dark"] .cancelBtn {
+    background: #5a6268;
+}
+
+[data-theme="dark"] .cancelBtn:hover {
+    background: #545b62;
+}

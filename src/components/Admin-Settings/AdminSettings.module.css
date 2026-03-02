@@ -1,0 +1,191 @@
+.container {
+    padding: 0px 20px 40px 20px;
+    background-color: #87CEFA;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+    background: #5D87B8;
+    color: white;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.headerIcon {
+    font-size: 20px;
+}
+
+.settingItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.settingItem:last-child {
+    border-bottom: none;
+}
+
+.settingText h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #1A3C6D;
+    font-weight: 700;
+}
+
+.settingText p {
+    margin: 5px 0 0;
+    color: #556B8D;
+    font-size: 15px;
+}
+
+/* Design-Accurate Toggle Switch */
+.switch {
+    position: relative;
+    width: 46px;
+    height: 24px;
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #61C478;
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+}
+
+/* Action Grid Styling */
+.actionGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.actionButton {
+    padding: 30px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-right: 1px solid #e0e0e0;
+    transition: background 0.2s;
+}
+
+.actionButton:last-child {
+    border-right: none;
+}
+
+.actionButton:hover {
+    background: #f8fbff;
+}
+
+.btnContent {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    color: #333;
+}
+
+.actionIcon {
+    font-size: 28px;
+    color: #333;
+}
+
+.chevron {
+    color: #333;
+    font-size: 18px;
+}
+
+/* Dark Mode Styles */
+[data-theme="dark"] .container {
+    background-color: #1a1a2e;
+}
+
+[data-theme="dark"] .title {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .card {
+    background: #16213e;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .cardHeader {
+    background: #0f3460;
+}
+
+[data-theme="dark"] .settingItem {
+    border-bottom-color: #0f3460;
+}
+
+[data-theme="dark"] .settingText h3 {
+    color: #87CEFA;
+}
+
+[data-theme="dark"] .settingText p {
+    color: #B0C4DE;
+}
+
+[data-theme="dark"] .actionButton {
+    border-right-color: #0f3460;
+}
+
+[data-theme="dark"] .actionButton:hover {
+    background: #0f3460;
+}
+
+[data-theme="dark"] .btnContent {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .actionIcon {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .chevron {
+    color: #e0e0e0;
+}

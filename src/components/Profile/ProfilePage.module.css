@@ -1,23 +1,39 @@
+/* ProfilePage.module.css */
+/* Light Mode (Default) */
 .container {
   min-height: 100vh;
-  background-color: #8ccfff;
+  background-color: var(--bg-primary, #8ccfff);
   display: flex;
   flex-direction: column;
   font-family: 'Arial Black', 'Arial Bold', sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .container {
+  background-color: #1a1a2e;
 }
 
 /* Navbar */
 .navbar {
-  background-color: white;
-  padding: 10px 40px;
+  padding: 10px 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: white;
   border-bottom: 1px solid #ccc;
+  min-height: 45px;
+  box-sizing: border-box;
 }
 
+[data-theme="dark"] .navbar {
+  background-color: #16213e;
+  border-bottom-color: #1e3a5f;
+}
+
+
 .logo {
-  height: 50px;
+  height: 45px;
   cursor: pointer;
 }
 
@@ -25,6 +41,7 @@
   display: flex;
   align-items: center;
   gap: 20px;
+  height: 45px;
 }
 
 .nameBadge {
@@ -41,25 +58,35 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 35px;
 }
 
 /* Profile Icon */
 .profileWrapper {
   position: relative;
-  padding-bottom: 5px;
+  display: flex;
+  align-items: center;
+  height: 35px;
 }
 
 .avatarCircleSmall {
-  width: 30px;
-  height: 30px;
+  width: 40px; /* Changed from 30px */
+  height: 40px; /* Changed from 30px */
   border-radius: 50%;
-  border: 1px solid #000;
+  border: 2px solid #333; /* Changed from 1px to 2px */
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: transparent;
+  background: #fff; /* Added white background */
   overflow: hidden;
+}
+
+[data-theme="dark"] .avatarCircleSmall {
+  border-color: #aaa;
+  background-color: #1a1a2e;
 }
 
 .profilePhoto {
@@ -69,19 +96,21 @@
   border-radius: 50%;
 }
 
+/* Dropdown */
 .dropdown {
   visibility: hidden;
   opacity: 0;
   position: absolute;
   top: 100%;
   right: -10px;
-  background-color: #1e3a5f;
+  background-color: #1e4baf;
   border-radius: 12px;
   min-width: 100px;
   transition: all 0.3s ease;
   transform: translateY(10px);
   z-index: 10;
   margin-top: 5px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .profileWrapper:hover .dropdown {
@@ -95,7 +124,7 @@
   height: 0; 
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 10px solid #1e3a5f;
+  border-bottom: 10px solid #1e4baf;
   position: absolute;
   top: -10px;
   right: 15px;
@@ -114,10 +143,11 @@
   color: white;
   text-decoration: none;
   font-size: 14px;
+  transition: background-color 0.2s ease;
 }
 
 .menuList li a:hover {
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Main Content */
@@ -137,6 +167,11 @@
   border-radius: 15px;
   border: 1px solid #ffffffaa;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+[data-theme="dark"] .card {
+  background-color: #1b365f;
+  border-color: #1e3a5f;
 }
 
 .title {
@@ -200,6 +235,73 @@
 .labelYellow span {
   color: white;
   margin-left: 10px;
+}
+
+/* Header Section with Avatar */
+.headerSection {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 40px;
+  justify-content: center;
+}
+
+.avatarCircleLarge {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+[data-theme="dark"] .avatarCircleLarge {
+  border-color: #aaa;
+  background-color: #1a1a2e;
+}
+
+.profilePhotoLarge {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.cameraIcon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(0,0,0,0.5);
+  padding: 4px;
+  border-radius: 50%;
+  font-size: 14px;
+}
+
+.infoLabels {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.labelYellow {
+  color: #ffcc00;
+  font-size: 18px;
+}
+
+.labelYellow span {
+  color: white;
+  margin-left: 10px;
+  transition: color 0.3s ease;
+}
+
+[data-theme="dark"] .labelYellow span {
+  color: #e0e0e0;
 }
 
 /* Form Styling */
@@ -274,3 +376,61 @@
   transform: translateY(2px);
   box-shadow: none;
 }
+
+
+/* Toast Container - positioned relative to the card */
+.card {
+  background-color: #1e3a5f;
+  width: 620px;
+  height: 700px;
+  padding: 40px;
+  border-radius: 15px;
+  border: 1px solid #ffffffaa;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  position: relative; /* Add this */
+}
+
+/* Toast Notification */
+.toast {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #4caf50;
+  color: white;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeInOut 3s ease-in-out;
+  white-space: nowrap;
+}
+
+.toastIcon {
+  font-size: 20px;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  85% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}
+

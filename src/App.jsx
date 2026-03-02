@@ -49,9 +49,16 @@ function App() {
       username: googleUser.email?.split('@')[0] || 'user',
       email: googleUser.email || '',
       password: 'google-oauth',
-      photo: googleUser.picture || null  // Google profile photo
+      photo: googleUser.picture || null
     });
     setCurrentPage('languages');
+  };
+
+  // Handle logout - go back to landing page
+  const handleLogout = () => {
+    setCurrentPage('landing');
+    setSelectedLang(null);
+    setSelectedConcept(null);
   };
 
   // Landing Page
@@ -107,6 +114,7 @@ function App() {
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
         onHomeClick={goToLanguages}
+        onLogout={handleLogout}
       />
     );
   }
@@ -121,6 +129,7 @@ function App() {
           toggleTheme={toggleTheme}
           onProfileClick={goToProfile}
           onHomeClick={goToLanding}
+          onLogout={handleLogout}
           userData={userData}
         />
       )}
@@ -134,15 +143,17 @@ function App() {
       )}
 
 
-    {selectedConcept && (
-      <CodeEditor 
-        language={selectedLang}
-        concept={selectedConcept}
-        onBack={() => setSelectedConcept(null)}
-        onProfileClick={goToProfile}
-        userData={userData}
-      />
-    )}
+      {selectedConcept && (
+        <CodeEditor 
+          language={selectedLang}
+          concept={selectedConcept}
+          onBack={() => setSelectedConcept(null)}
+          onProfileClick={goToProfile}
+          onHomeClick={goToLanguages}
+          onLogout={handleLogout}
+          userData={userData}
+        />
+      )}
     </div>
   );
 }

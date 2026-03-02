@@ -1,12 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
+import ThemeToggle from '../shared/ThemeToggle';
 
-const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick }) => {
-  // Use local state for editing
+const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, onLogout }) => {
   const [form, setForm] = useState({ ...userData });
   const [errors, setErrors] = useState({});
-  const [saveMessage, setSaveMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
   const fileInputRef = useRef(null);
+
+  // Auto-hide toast after 3 seconds
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   const validate = () => {
     const newErrors = {};
@@ -22,15 +32,12 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick })
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      setSaveMessage('');
       return;
     }
     
     onSave(form);
     setErrors({});
-    setSaveMessage('✅ Save successfully!');
-    
-    setTimeout(() => setSaveMessage(''), 3000);
+    setShowToast(true);
   };
 
   // Handle photo change
@@ -52,6 +59,14 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick })
 
   return (
     <div className={styles.container}>
+      {/* Toast Notification */}
+      {showToast && (
+        <div className={styles.toast}>
+          <span className={styles.toastIcon}>✅</span>
+          Save successfully!
+        </div>
+      )}
+
       {/* Navbar */}
       <nav className={styles.navbar}>
         <img 
@@ -66,16 +81,27 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick })
             {userData?.name || 'Name'}
           </div>
           
-          <button onClick={toggleTheme} className={styles.themeToggle}>
-            {isDarkMode ? '🌙' : '☀️'}
-          </button>
+          <ThemeToggle 
+            isDarkMode={isDarkMode} 
+            onClick={toggleTheme}
+          />
           
           <div className={styles.profileWrapper}>
             <div className={styles.avatarCircleSmall}>
               {form.photo ? (
                 <img src={form.photo} alt="Profile" className={styles.profilePhoto} />
               ) : (
-                <span>👤</span>
+                <svg 
+                  width="18" 
+                  height="18" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
               )}
             </div>
             
@@ -83,7 +109,7 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick })
               <div className={styles.arrowUp}></div>
               <ul className={styles.menuList}>
                 <li><a href="#" onClick={(e) => { e.preventDefault(); onHomeClick(); }}>Home</a></li>
-                <li><a href="#">Log Out</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); onLogout(); }}>Log Out</a></li>
               </ul>
             </div>
           </div>
@@ -101,9 +127,17 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick })
               {form.photo ? (
                 <img src={form.photo} alt="Profile" className={styles.profilePhotoLarge} />
               ) : (
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="1.5">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
+                <svg 
+                  width="40" 
+                  height="40" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2"
+                  style={{ color: '#333' }}
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
                 </svg>
               )}
               <div className={styles.cameraIcon}>📷</div>
@@ -169,11 +203,6 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick })
               />
             </div>
 
-            {/* Success Message */}
-            {saveMessage && (
-              <div className={styles.successMessage}>{saveMessage}</div>
-            )}
-            
             <div className={styles.saveBtnWrapper}>
               <button type="submit" className={styles.saveBtn}>
                 Save

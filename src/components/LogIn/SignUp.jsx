@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './SignUp.module.css';
+import ThemeToggle from '../shared/ThemeToggle';
 
 const SignUp = ({ isDarkMode, toggleTheme, onSignUp, onLogin, onHome }) => {
   const [formData, setFormData] = useState({
@@ -8,45 +9,14 @@ const SignUp = ({ isDarkMode, toggleTheme, onSignUp, onLogin, onHome }) => {
   });
 
   useEffect(() => {
-    // Load Google Identity Services
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
-
-    script.onload = () => {
-      // Initialize Google OAuth
-      if (window.google) {
-        window.google.accounts.oauth2.initTokenClient({
-          client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com', // Replace with your Client ID
-          scope: 'email profile openid',
-          callback: (response) => {
-            if (response.access_token) {
-              // Get user info
-              fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-                headers: { Authorization: `Bearer ${response.access_token}` }
-              })
-              .then(res => res.json())
-              .then(userInfo => {
-                console.log('Google User:', userInfo);
-                // Auto-fill form with Google info
-                setFormData({
-                  email: userInfo.email || '',
-                  password: 'google-oauth' // Placeholder
-                });
-                // Continue to LanguageCards
-                onSignUp();
-              });
-            }
-          }
-        });
-      }
-    };
   }, []);
 
   const handleGoogleClick = () => {
-    // Trigger Google OAuth picker
     const client = window.google?.accounts?.oauth2?.initTokenClient({
       client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
       scope: 'email profile openid',
@@ -58,11 +28,14 @@ const SignUp = ({ isDarkMode, toggleTheme, onSignUp, onLogin, onHome }) => {
           .then(res => res.json())
           .then(userInfo => {
             console.log('Google User:', userInfo);
-            setFormData({
+            // Pass Google user data to onSignUp
+            onSignUp({
+              name: userInfo.name || 'User',
+              username: userInfo.email?.split('@')[0] || 'user',
               email: userInfo.email || '',
-              password: 'google-oauth'
+              password: 'google-oauth',
+              photo: userInfo.picture || null
             });
-            onSignUp();
           });
         }
       }
@@ -75,7 +48,14 @@ const SignUp = ({ isDarkMode, toggleTheme, onSignUp, onLogin, onHome }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Sign up with:', formData);
-    onSignUp();
+    // Pass form data to onSignUp
+    onSignUp({
+      name: formData.email.split('@')[0],
+      username: formData.email.split('@')[0],
+      email: formData.email,
+      password: formData.password,
+      photo: null
+    });
   };
 
   return (
@@ -90,12 +70,10 @@ const SignUp = ({ isDarkMode, toggleTheme, onSignUp, onLogin, onHome }) => {
         />
         
         <div className={styles.navRight}>
-          <button 
-            onClick={toggleTheme}
-            className={styles.themeToggle}
-          >
-            {isDarkMode ? '☀️' : '🌙'}
-          </button>
+            <ThemeToggle 
+              isDarkMode={isDarkMode} 
+              onClick={toggleTheme}
+            />
         </div>
       </nav>
 

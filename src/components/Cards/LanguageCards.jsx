@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './LanguageCards.module.css';
+import ThemeToggle from '../shared/ThemeToggle';
 
-const LanguageCards = ({ onSelect, isDarkMode, toggleTheme, onProfileClick, onHomeClick, userData }) => {
+const LanguageCards = ({ onSelect, isDarkMode, toggleTheme, onProfileClick, onHomeClick, onLogout, userData }) => {
   return (
     <div className={styles.container}>
       {/* Navbar */}
@@ -14,21 +15,16 @@ const LanguageCards = ({ onSelect, isDarkMode, toggleTheme, onProfileClick, onHo
         />
         
         <div className={styles.navActions}>
-
-          
           {/* Name Badge */}
           <div className={styles.nameBadge}>
             {userData?.name || 'Name'}
           </div>
           
           {/* Theme Toggle */}
-          <button 
+          <ThemeToggle 
+            isDarkMode={isDarkMode} 
             onClick={toggleTheme}
-            className={styles.themeToggle}
-            title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
-          >
-            {isDarkMode ? '☀️' : '🌙'}
-          </button>
+          />
           
           {/* Profile Icon with Photo */}
           <div className={styles.profileWrapper}>
@@ -53,7 +49,7 @@ const LanguageCards = ({ onSelect, isDarkMode, toggleTheme, onProfileClick, onHo
               <ul className={styles.menuList}>
                 <li><a href="#" onClick={(e) => { e.preventDefault(); onProfileClick(); }}>Profile</a></li>
                 <li><a href="#" onClick={(e) => { e.preventDefault(); onHomeClick(); }}>Home</a></li>
-                <li><a href="#">Log Out</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); onLogout(); }}>Log Out</a></li>
               </ul>
             </div>
           </div>

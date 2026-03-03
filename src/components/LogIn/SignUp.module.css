@@ -1,3 +1,4 @@
+/* SignUp.module.css */
 .container {
   min-height: 100vh;
   display: flex;
@@ -15,16 +16,18 @@
 /* Navbar */
 .navbar {
   background-color: var(--navbar-bg);
-  padding: 10px 50px;
+  padding: 10px 50px; /* Changed from 10px 50px - this should already be correct */
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid var(--navbar-border);
   transition: all 0.3s ease;
+  min-height: 45px;
+  box-sizing: border-box;
 }
 
 .logo {
-  height: 40px;
+  height: 45px;
   cursor: pointer;
 }
 
@@ -32,6 +35,7 @@
   display: flex;
   align-items: center;
   gap: 20px;
+  height: 45px;
 }
 
 .themeToggle {
@@ -39,6 +43,9 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 35px;
 }
 
 .signUpBtn {

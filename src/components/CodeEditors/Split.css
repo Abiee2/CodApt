@@ -1,3 +1,4 @@
+/* Split.css */
 /* Reset and base styles */
 html, body, #root {
   height: 100%;
@@ -53,6 +54,13 @@ html, body, #root {
 
 /* Add to Split.css - for profile dropdown hover */
 div[style*="position: relative"]:hover .profile-dropdown {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* CodeEditor Profile Dropdown */
+.codeEditorProfileWrapper:hover .codeEditorDropdown {
   visibility: visible !important;
   opacity: 1 !important;
   transform: translateY(0) !important;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './LandingPage.module.css';
+import ThemeToggle from '../shared/ThemeToggle';
 
 const LandingPage = ({ onGetStarted, isDarkMode, toggleTheme, onSignUp, onLogin }) => {
   return (
@@ -13,13 +14,10 @@ const LandingPage = ({ onGetStarted, isDarkMode, toggleTheme, onSignUp, onLogin 
         />
         
         <div className={styles.navRight}>
-          <button 
-            onClick={toggleTheme}
-            className={styles.themeToggle}
-            title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          >
-            {isDarkMode ? '☀️' : '🌙'}
-          </button>
+            <ThemeToggle 
+              isDarkMode={isDarkMode} 
+              onClick={toggleTheme}
+            />
           
           <button 
             onClick={onLogin}

@@ -22,7 +22,7 @@ function App() {
     username: 'johndoe',
     email: 'john@example.com',
     password: 'password123',
-    photo: null  // Profile photo URL
+    photo: null
   });
 
   useEffect(() => {
@@ -37,13 +37,41 @@ function App() {
     setIsDarkMode(!isDarkMode);
   };
 
-  // Navigation functions
+  // --- ADDED MISSING FUNCTIONS ---
+  const handleLogout = () => {
+    setIsAdmin(false);
+    setUserData({
+      name: 'John Doe',
+      username: 'johndoe',
+      email: 'john@example.com',
+      password: 'password123',
+      photo: null
+    });
+    goToLanding();
+  };
+
+  const goToAdmin = () => {
+    setCurrentPage('admin');
+  };
+
   const goToLanding = () => setCurrentPage('landing');
   const goToSignUp = () => setCurrentPage('signup');
   const goToLogin = () => setCurrentPage('login');
   const goToLanguages = () => setCurrentPage('languages');
   const goToProfile = () => setCurrentPage('profile');
-  const goToAdmin = () => setCurrentPage('admin');
+  // -------------------------------
+
+  // Navigation functions
+  const handleGoogleLogin = (googleUser) => {
+    setUserData({
+      name: googleUser.name || 'User',
+      username: googleUser.email?.split('@')[0] || 'user',
+      email: googleUser.email || '',
+      password: 'google-oauth',
+      photo: googleUser.picture || null
+    });
+    goToLanguages();
+  };
 
   // Landing Page
   if (currentPage === 'landing') {
@@ -81,9 +109,10 @@ function App() {
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
         onLogin={(loginData) => {
+          console.log("Login Data Received:", loginData); // Debugging
           if (loginData && loginData.isAdmin) {
             setIsAdmin(true);
-            goToAdmin();
+            goToAdmin(); // Navigate to Admin
           } else {
             setUserData(loginData || userData);
             goToLanguages();
@@ -114,6 +143,7 @@ function App() {
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
         onHomeClick={goToLanguages}
+        onLogout={handleLogout}
       />
     );
   }
@@ -128,6 +158,7 @@ function App() {
           toggleTheme={toggleTheme}
           onProfileClick={goToProfile}
           onHomeClick={goToLanding}
+          onLogout={handleLogout}
           userData={userData}
         />
       )}
@@ -140,16 +171,17 @@ function App() {
         />
       )}
 
-
-    {selectedConcept && (
-      <CodeEditor 
-        language={selectedLang}
-        concept={selectedConcept}
-        onBack={() => setSelectedConcept(null)}
-        onProfileClick={goToProfile}
-        userData={userData}
-      />
-    )}
+      {selectedConcept && (
+        <CodeEditor 
+          language={selectedLang}
+          concept={selectedConcept}
+          onBack={() => setSelectedConcept(null)}
+          onProfileClick={goToProfile}
+          onHomeClick={goToLanguages}
+          onLogout={handleLogout}
+          userData={userData}
+        />
+      )}
     </div>
   );
 }

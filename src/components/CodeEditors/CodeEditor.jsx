@@ -3,7 +3,15 @@ import Editor from '@monaco-editor/react';
 import Split from 'react-split';
 import './Split.css';
 
-const CodeEditor = ({ language, concept, onBack, onProfileClick, userData }) => {
+const CodeEditor = ({ 
+  language, 
+  concept, 
+  onBack, 
+  onProfileClick, 
+  onHomeClick, 
+  onLogout, 
+  userData 
+}) => {
   const [code, setCode] = useState('# Write your code here\nprint("Hello CodApt!")');
   const [output, setOutput] = useState('');
 
@@ -28,13 +36,27 @@ const CodeEditor = ({ language, concept, onBack, onProfileClick, userData }) => 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', backgroundColor: '#0d1117', color: 'white', fontFamily: 'sans-serif' }}>
       {/* Navbar */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '3px 24px', backgroundColor: 'white', borderBottom: '1px solid #e5e7eb', flexShrink: 0 }}>
+      <header style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        padding: '10px 50px',
+        backgroundColor: 'white', 
+        borderBottom: '1px solid #e5e7eb', 
+        flexShrink: 0,
+        minHeight: '45px',
+        boxSizing: 'border-box'
+      }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <img 
             src="/CODAPT_LOGO.png" 
             alt="CodApt Logo" 
-            style={{ height: '50px', width: 'auto', cursor: 'pointer' }}
-            onClick={onBack}
+            style={{ 
+              height: '45px',
+              width: 'auto', 
+              cursor: 'pointer' 
+            }}
+            onClick={onHomeClick}
           />
           <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#1e3a8a' }}>
             {language?.toUpperCase()} / {concept}
@@ -47,58 +69,34 @@ const CodeEditor = ({ language, concept, onBack, onProfileClick, userData }) => 
             {userData?.name || 'Student'}
           </div>
           
-          {/* Profile Icon with Photo */}
-          <div style={{ position: 'relative', paddingBottom: '10px' }}>
-            <div 
-              onClick={onProfileClick}
-              style={{ 
-                width: '40px', 
-                height: '40px', 
-                border: '2px solid #9ca3af', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                cursor: 'pointer',
-                overflow: 'hidden',
-                backgroundColor: '#f3f4f6'
-              }}
-            >
-              {userData?.photo ? (
-                <img 
-                  src={userData.photo} 
-                  alt="Profile" 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
-                />
-              ) : (
-                <span style={{ fontSize: '20px' }}>👤</span>
-              )}
-            </div>
-            
-            {/* Dropdown Menu */}
-            <div style={{ 
-              visibility: 'hidden', 
-              opacity: 0, 
-              position: 'absolute', 
-              top: '100%', 
-              right: '-10px',
-              backgroundColor: '#1e4baf', 
-              borderRadius: '12px', 
-              minWidth: '100px', 
-              transition: 'all 0.3s ease', 
-              transform: 'translateY(10px)', 
-              zIndex: 10,
-              marginTop: '5px'
+          {/* Profile Icon - No Dropdown */}
+          <div 
+            style={{ 
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '50%', 
+              border: '2px solid #333',
+              padding: '2px',
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              cursor: 'pointer',
+              overflow: 'hidden',
+              backgroundColor: '#fff',
             }}
-            className="profile-dropdown"
-            >
-              <div style={{ width: 0, height: 0, borderLeft: '10px solid transparent', borderRight: '10px solid transparent', borderBottom: '10px solid #1e4baf', position: 'absolute', top: '-10px', right: '18px' }}></div>
-              <ul style={{ listStyle: 'none', padding: '10px 0', margin: 0, textAlign: 'center' }}>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); onProfileClick(); }} style={{ display: 'block', padding: '8px 15px', color: 'white', textDecoration: 'none', fontSize: '0.85rem' }}>Profile</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ display: 'block', padding: '8px 15px', color: 'white', textDecoration: 'none', fontSize: '0.85rem' }}>Home</a></li>
-                <li><a href="#" style={{ display: 'block', padding: '8px 15px', color: 'white', textDecoration: 'none', fontSize: '0.85rem' }}>Log Out</a></li>
-              </ul>
-            </div>
+          >
+            {userData?.photo ? (
+              <img 
+                src={userData.photo} 
+                alt="Profile" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+              />
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            )}
           </div>
         </div>
       </header>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './SignUp.module.css';
+import ThemeToggle from '../shared/ThemeToggle';
 
 const Login = ({ isDarkMode, toggleTheme, onLogin, onSignUp, onHome }) => {
   const [formData, setFormData] = useState({
@@ -14,20 +15,14 @@ const Login = ({ isDarkMode, toggleTheme, onLogin, onSignUp, onHome }) => {
   const [adminError, setAdminError] = useState('');
 
   useEffect(() => {
-    // Load Google Identity Services
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
-
-    script.onload = () => {
-      // Ready
-    };
   }, []);
 
   const handleGoogleClick = () => {
-    // Trigger Google OAuth picker - user can choose any email
     const client = window.google?.accounts?.oauth2?.initTokenClient({
       client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
       scope: 'email profile openid',
@@ -39,11 +34,14 @@ const Login = ({ isDarkMode, toggleTheme, onLogin, onSignUp, onHome }) => {
           .then(res => res.json())
           .then(userInfo => {
             console.log('Google User:', userInfo);
-            setFormData({
+            // Pass Google user data to onLogin
+            onLogin({
+              name: userInfo.name || 'User',
+              username: userInfo.email?.split('@')[0] || 'user',
               email: userInfo.email || '',
-              password: 'google-oauth'
+              password: 'google-oauth',
+              photo: userInfo.picture || null
             });
-            onLogin();
           });
         }
       }
@@ -56,7 +54,14 @@ const Login = ({ isDarkMode, toggleTheme, onLogin, onSignUp, onHome }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Login with:', formData);
-    onLogin();
+    // Pass form data to onLogin
+    onLogin({
+      name: formData.email.split('@')[0],
+      username: formData.email.split('@')[0],
+      email: formData.email,
+      password: formData.password,
+      photo: null
+    });
   };
 
   const handleAdminSubmit = (e) => {
@@ -82,18 +87,16 @@ const Login = ({ isDarkMode, toggleTheme, onLogin, onSignUp, onHome }) => {
         />
         
         <div className={styles.navRight}>
-          <button 
-            onClick={onSignUp}
-            className={styles.signUpBtn}
-          >
-            Sign Up
-          </button>
-          <button 
-            onClick={toggleTheme}
-            className={styles.themeToggle}
-          >
-            {isDarkMode ? '☀️' : '🌙'}
-          </button>
+            <ThemeToggle 
+              isDarkMode={isDarkMode} 
+              onClick={toggleTheme}
+            />
+                        <button 
+              onClick={onSignUp}
+              className={styles.signUpBtn}
+            >
+              Sign Up
+            </button>
         </div>
       </nav>
 

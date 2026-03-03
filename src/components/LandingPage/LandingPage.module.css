@@ -1,3 +1,4 @@
+/* LandingPage.module.css */
 .container {
   min-height: 100vh;
   display: flex;
@@ -36,19 +37,24 @@
 }
 
 .signInBtn {
-  background-color: transparent;
-  color: #1e3a5f;
-  border: 2px solid #1e3a5f;
-  padding: 6px 18px;
+  background-color: #1e3a5f;
+  color: white;
+  border: none;
+  padding: 8px 20px;
   border-radius: 6px;
   font-weight: 800;
   font-size: 14px;
   cursor: pointer;
+  box-shadow: 0 4px 0px #162a45; /* Darker shade for shadow */
 }
 
 .signInBtn:hover {
-  background-color: #1e3a5f;
-  color: white;
+  background-color: #2c5282;
+}
+
+.signInBtn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0px #162a45;
 }
 
 .signUpBtn {
@@ -61,6 +67,10 @@
   font-size: 14px;
   cursor: pointer;
   box-shadow: 0 4px 0px #d4aa00;
+}
+
+.signUpBtn:hover {
+  background-color: #ffd700;
 }
 
 .signUpBtn:active {
@@ -106,6 +116,10 @@
   font-weight: 500;
 }
 
+[data-theme="dark"] .subtitle {
+  color: #0c305e;
+}
+
 .getStartedBtn {
   background-color: #ffcc00;
   color: #000;
@@ -116,6 +130,10 @@
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 6px 0px #d4aa00;
+}
+
+.getStartedBtn:hover{
+  background-color: #ffd700;
 }
 
 .getStartedBtn:active {

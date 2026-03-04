@@ -163,10 +163,13 @@ function App() {
         />
       )}
 
+
       {selectedLang && !selectedConcept && (
         <ConceptModal 
           language={selectedLang}
-          onSelect={setSelectedConcept}
+          onSelect={(concept) => {
+            setSelectedConcept(concept);
+          }}
           onClose={() => setSelectedLang(null)} 
         />
       )}
@@ -180,6 +183,7 @@ function App() {
           onHomeClick={goToLanguages}
           onLogout={handleLogout}
           userData={userData}
+          isDarkMode={isDarkMode}
         />
       )}
     </div>

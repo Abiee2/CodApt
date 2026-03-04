@@ -196,3 +196,21 @@
   transform: translateY(2px);
   box-shadow: 0 1px 0px #cccccc;
 }
+
+/* Button Style  */
+.signInBtn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 0px #2980b9;
+}
+
+.signInBtn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0px #2980b9;
+}

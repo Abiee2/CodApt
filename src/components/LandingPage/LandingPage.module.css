@@ -3,6 +3,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* Prevents horizontal scroll bugs */
 }
 
 /* Navbar */
@@ -88,10 +89,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding-top: 100px;
+  justify-content: center; /* Changed from flex-start to center for better balance */
+  padding: 100px 20px;     /* Added horizontal padding */
   text-align: center;
-  min-height: calc(100vh - 70px);
+  /* REMOVE min-height: calc(100vh - 70px); */
 }
 
 [data-theme="dark"] .hero {
@@ -139,4 +140,59 @@
 .getStartedBtn:active {
   transform: translateY(4px);
   box-shadow: 0 2px 0px #d4aa00;
+}
+
+/* Footer Styles */
+.footer {
+  position: relative;
+  z-index: 10;
+  /* UPDATED: Use CSS variable instead of hardcoded color */
+  background-color: var(--footer-bg); 
+  color: white;
+  padding: 40px 50px;
+  border-top: 4px solid #ffcc00;
+}
+
+.footerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.footerLeft p {
+  margin: 0;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.footerRight {
+  display: flex;
+  gap: 30px;
+}
+
+.footerRight a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-weight: 600;
+}
+
+.footerRight a:hover {
+  color: #ffcc00; /* Highlights gold on hover */
+}
+
+/* Responsive adjustment for small screens */
+@media (max-width: 768px) {
+  .footerContent {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .footerRight {
+    gap: 15px;
+  }
 }

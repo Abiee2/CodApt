@@ -773,3 +773,67 @@
 [data-theme="dark"] .cancelBtn:hover {
     background: #545b62;
 }
+
+/* Graph Modal Styles */
+.graphModalContent {
+    background: white;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    overflow: hidden;
+    animation: modalFadeIn 0.3s ease;
+}
+
+.graphSubtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.graphStats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.graphStatItem {
+    text-align: center;
+}
+
+.graphStatItem span:first-child {
+    display: block;
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+}
+
+.graphStatValue {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2D58A6;
+}
+
+/* Dark mode for graph modal */
+[data-theme="dark"] .graphModalContent {
+    background: #16213e;
+}
+
+[data-theme="dark"] .graphSubtitle {
+    color: #aaa;
+}
+
+[data-theme="dark"] .graphStats {
+    border-top-color: #0f3460;
+}
+
+[data-theme="dark"] .graphStatItem span:first-child {
+    color: #aaa;
+}
+
+[data-theme="dark"] .graphStatValue {
+    color: #76D7A4;
+}

@@ -75,6 +75,11 @@
   font-weight: bold;
 }
 
+.iconBtn {
+  cursor: text;
+  font-size: 20px;
+}
+
 .content {
   padding: 30px 40px 40px 40px;
   flex: 1;
@@ -243,4 +248,62 @@
 
 [data-theme="dark"] .logo {
   background: #16213e;
+}
+
+/* Profile Menu Styles */
+.profileWrapper {
+  position: relative;
+}
+
+.profileCircle {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #2D58A6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.profileMenu {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  min-width: 120px;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.profileMenuItem {
+  padding: 12px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.profileMenuItem:hover {
+  background: #f5f5f5;
+}
+
+/* Dark mode for profile menu */
+[data-theme="dark"] .profileMenu {
+  background: #16213e;
+}
+
+[data-theme="dark"] .profileMenuItem {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .profileMenuItem:hover {
+  background: #0f3460;
 }

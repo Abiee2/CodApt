@@ -167,6 +167,8 @@
   border-radius: 15px;
   border: 1px solid #ffffffaa;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  overflow-y: auto; /* Enable vertical scrolling */
+
 }
 
 [data-theme="dark"] .card {

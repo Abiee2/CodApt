@@ -4,13 +4,20 @@ import UsersPanel from '../Admin-Users/AdminUsers';
 import AdminReports from '../Admin-Reports/AdminReports';
 import AdminSettings from '../Admin-Settings/AdminSettings';
 import AdminCourses from '../Admin-Courses/AdminCourses';
+import AdminProfile from '../Admin-Profile/AdminProfile';
 
 const AdminDashboard = ({ isDarkMode, toggleTheme }) => {
   const [currentView, setCurrentView] = useState('dashboard');
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const handleNavClick = (view) => {
     setCurrentView(view);
+    setShowProfileMenu(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLogout = () => {
+    window.location.href = '/';
   };
 
   const users = [
@@ -22,7 +29,6 @@ const AdminDashboard = ({ isDarkMode, toggleTheme }) => {
 
   return (
     <div className={styles.container}>
-      {/* Sidebar Navigation */}
       <aside className={styles.sidebar}>
         <div className={styles.logo}>
             <img src="/CODAPT_LOGO.png" alt="CodAPT" />
@@ -62,18 +68,28 @@ const AdminDashboard = ({ isDarkMode, toggleTheme }) => {
       </aside>
 
       <main className={styles.mainWrapper}>
-        {/* Top Header */}
         <header className={styles.topHeader}>
           <div className={styles.headerRight}>
             <span className={styles.adminBadge}>Admin</span>
             <span className={styles.iconBtn} onClick={toggleTheme}>
               {isDarkMode ? '☀️' : '🌙'}
             </span>
-            <div className={styles.profileCircle}>👤</div>
+            <div className={styles.profileWrapper}>
+              <div className={styles.profileCircle} onClick={() => setShowProfileMenu(!showProfileMenu)}>👤</div>
+              {showProfileMenu && (
+                <div className={styles.profileMenu}>
+                  <div className={styles.profileMenuItem} onClick={() => handleNavClick('profile')}>
+                    <span>👤</span> Profile
+                  </div>
+                  <div className={styles.profileMenuItem} onClick={handleLogout}>
+                    <span>🚪</span> Logout
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
-        {/* Dashboard Content */}
         <div className={styles.content}>
           {currentView === 'dashboard' && (
             <>
@@ -86,18 +102,18 @@ const AdminDashboard = ({ isDarkMode, toggleTheme }) => {
                   </div>
                 </div>
                 <div className={styles.statCard}>
-                    <div className={styles.statContent}>
-                        <span className={styles.statEmoji}>📈</span>
-                        <p>Avg Score</p>
-                        <h3>30%</h3>
-                    </div>
+                  <div className={styles.statContent}>
+                    <span className={styles.statEmoji}>📈</span>
+                    <p>Avg Score</p>
+                    <h3>30%</h3>
+                  </div>
                 </div>
                 <div className={styles.statCard}>
-                    <div className={styles.statContent}>
-                        <span className={styles.statEmoji}>✅</span>
-                        <p>Average Progress</p>
-                        <h3>74%</h3>
-                    </div>
+                  <div className={styles.statContent}>
+                    <span className={styles.statEmoji}>✅</span>
+                    <p>Average Progress</p>
+                    <h3>74%</h3>
+                  </div>
                 </div>
               </div>
 
@@ -140,6 +156,7 @@ const AdminDashboard = ({ isDarkMode, toggleTheme }) => {
           {currentView === 'reports' && <AdminReports />}
           {currentView === 'content' && <AdminCourses />}
           {currentView === 'settings' && <AdminSettings />}
+          {currentView === 'profile' && <AdminProfile isDarkMode={isDarkMode} toggleTheme={toggleTheme} onBack={() => handleNavClick('dashboard')} />}
         </div>
       </main>
     </div>
@@ -147,3 +164,4 @@ const AdminDashboard = ({ isDarkMode, toggleTheme }) => {
 };
 
 export default AdminDashboard;
+

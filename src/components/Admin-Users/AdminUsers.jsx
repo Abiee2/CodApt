@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import styles from './AdminUsers.module.css';
 
 const UsersPanel = () => {
   const [users, setUsers] = useState([
-    { id: 1, name: "Marian R", email: "marian@gmail.com", progress: 74, color: "#76D7A4", enrolledDate: "2024-01-15", lastActive: "2024-03-20", scores: { python: 85, javascript: 78, java: 92 }, completedLessons: 45, certificates: 3, isBanned: false },
-    { id: 2, name: "Samantha V", email: "sam@gmail.com", progress: 32, color: "#F1C40F", enrolledDate: "2024-02-01", lastActive: "2024-03-18", scores: { python: 45, javascript: 52, java: 38 }, completedLessons: 18, certificates: 1, isBanned: false },
-    { id: 3, name: "Ana L", email: "ana@gmail.com", progress: 61, color: "#76D7A4", enrolledDate: "2024-01-20", lastActive: "2024-03-19", scores: { python: 72, javascript: 68, java: 75 }, completedLessons: 38, certificates: 2, isBanned: false },
-    { id: 4, name: "Mark N", email: "mark@gmail.com", progress: 73, color: "#76D7A4", enrolledDate: "2024-01-10", lastActive: "2024-03-20", scores: { python: 88, javascript: 82, java: 79 }, completedLessons: 42, certificates: 3, isBanned: false },
-    { id: 5, name: "Wynona K", email: "Wyn@gmail.com", progress: 41, color: "#F1C40F", enrolledDate: "2024-02-05", lastActive: "2024-03-15", scores: { python: 55, javascript: 48, java: 52 }, completedLessons: 22, certificates: 1, isBanned: false },
-    { id: 6, name: "Rainier P", email: "rainier@gmail.com", progress: 19, color: "#E74C3C", enrolledDate: "2024-02-10", lastActive: "2024-03-10", scores: { python: 28, javascript: 22, java: 25 }, completedLessons: 8, certificates: 0, isBanned: true },
-    { id: 7, name: "Catherine S", email: "cath@gmail.com", progress: 52, color: "#76D7A4", enrolledDate: "2024-01-25", lastActive: "2024-03-17", scores: { python: 65, javascript: 58, java: 62 }, completedLessons: 30, certificates: 2, isBanned: false },
-    { id: 8, name: "Donn T", email: "don@gmail.com", progress: 55, color: "#76D7A4", enrolledDate: "2024-01-18", lastActive: "2024-03-19", scores: { python: 68, javascript: 72, java: 58 }, completedLessons: 32, certificates: 2, isBanned: false },
-    { id: 9, name: "Javier Q", email: "javier@gmail.com", progress: 30, color: "#F1C40F", enrolledDate: "2024-02-08", lastActive: "2024-03-14", scores: { python: 42, javascript: 35, java: 40 }, completedLessons: 16, certificates: 0, isBanned: false },
-    { id: 10, name: "Selena O", email: "selena@gmail.com", progress: 39, color: "#F1C40F", enrolledDate: "2024-02-03", lastActive: "2024-03-16", scores: { python: 48, javascript: 52, java: 45 }, completedLessons: 20, certificates: 1, isBanned: false },
-    { id: 11, name: "Hazel M", email: "hazel@gmail.com", progress: 53, color: "#76D7A4", enrolledDate: "2024-01-22", lastActive: "2024-03-18", scores: { python: 62, javascript: 58, java: 65 }, completedLessons: 31, certificates: 2, isBanned: false },
+    { id: 1, name: "Marian R", email: "marian@gmail.com", progress: 74, color: "#76D7A4", enrolledDate: "2024-01-15", lastActive: "2024-03-20", scores: { python: 85, javascript: 78, java: 92 }, completedLessons: 45, certificates: 3, isBanned: false, progressHistory: [{ week: 'Week 1', progress: 10 }, { week: 'Week 2', progress: 20 }, { week: 'Week 3', progress: 35 }, { week: 'Week 4', progress: 45 }, { week: 'Week 5', progress: 55 }, { week: 'Week 6', progress: 65 }, { week: 'Week 7', progress: 74 }] },
+    { id: 2, name: "Samantha V", email: "sam@gmail.com", progress: 32, color: "#F1C40F", enrolledDate: "2024-02-01", lastActive: "2024-03-18", scores: { python: 45, javascript: 52, java: 38 }, completedLessons: 18, certificates: 1, isBanned: false, progressHistory: [{ week: 'Week 1', progress: 5 }, { week: 'Week 2', progress: 12 }, { week: 'Week 3', progress: 18 }, { week: 'Week 4', progress: 25 }, { week: 'Week 5', progress: 32 }] },
+    { id: 3, name: "Ana L", email: "ana@gmail.com", progress: 61, color: "#76D7A4", enrolledDate: "2024-01-20", lastActive: "2024-03-19", scores: { python: 72, javascript: 68, java: 75 }, completedLessons: 38, certificates: 2, isBanned: false, progressHistory: [{ week: 'Week 1', progress: 8 }, { week: 'Week 2', progress: 18 }, { week: 'Week 3', progress: 28 }, { week: 'Week 4', progress: 40 }, { week: 'Week 5', progress: 50 }, { week: 'Week 6', progress: 61 }] },
+    { id: 4, name: "Mark N", email: "mark@gmail.com", progress: 73, color: "#76D7A4", enrolledDate: "2024-01-10", lastActive: "2024-03-20", scores: { python: 88, javascript: 82, java: 79 }, completedLessons: 42, certificates: 3, isBanned: false, progressHistory: [{ week: 'Week 1', progress: 12 }, { week: 'Week 2', progress: 24 }, { week: 'Week 3', progress: 36 }, { week: 'Week 4', progress: 50 }, { week: 'Week 5', progress: 60 }, { week: 'Week 6', progress: 68 }, { week: 'Week 7', progress: 73 }] },
+    { id: 5, name: "Wynona K", email: "Wyn@gmail.com", progress: 41, color: "#F1C40F", enrolledDate: "2024-02-05", lastActive: "2024-03-15", scores: { python: 55, javascript: 48, java: 52 }, completedLessons: 22, certificates: 1, isBanned: false, progressHistory: [{ week: 'Week 1', progress: 6 }, { week: 'Week 2', progress: 15 }, { week: 'Week 3', progress: 22 }, { week: 'Week 4', progress: 30 }, { week: 'Week 5', progress: 41 }] },
+    { id: 6, name: "Rainier P", email: "rainier@gmail.com", progress: 19, color: "#E74C3C", enrolledDate: "2024-02-10", lastActive: "2024-03-10", scores: { python: 28, javascript: 22, java: 25 }, completedLessons: 8, certificates: 0, isBanned: true, progressHistory: [{ week: 'Week 1', progress: 3 }, { week: 'Week 2', progress: 8 }, { week: 'Week 3', progress: 14 }, { week: 'Week 4', progress: 19 }] },
+    { id: 7, name: "Catherine S", email: "cath@gmail.com", progress: 52, color: "#76D7A4", enrolledDate: "2024-01-25", lastActive: "2024-03-17", scores: { python: 65, javascript: 58, java: 62 }, completedLessons: 30, certificates: 2, isBanned: false, progressHistory: [{ week: 'Week 1', progress: 7 }, { week: 'Week 2', progress: 16 }, { week: 'Week 3', progress: 25 }, { week: 'Week 4', progress: 35 }, { week: 'Week 5', progress: 45 }, { week: 'Week 6', progress: 52 }] },
+    { id: 8, name: "Donn T", email: "don@gmail.com", progress: 55, color: "#76D7A4", enrolledDate: "2024-01-18", lastActive: "2024-03-19", scores: { python: 68, javascript: 72, java: 58 }, completedLessons: 32, certificates: 2, isBanned: false, progressHistory: [{ week: 'Week 1', progress: 9 }, { week: 'Week 2', progress: 20 }, { week: 'Week 3', progress: 30 }, { week: 'Week 4', progress: 40 }, { week: 'Week 5', progress: 48 }, { week: 'Week 6', progress: 55 }] },
+    { id: 9, name: "Javier Q", email: "javier@gmail.com", progress: 30, color: "#F1C40F", enrolledDate: "2024-02-08", lastActive: "2024-03-14", scores: { python: 42, javascript: 35, java: 40 }, completedLessons: 16, certificates: 0, isBanned: false, progressHistory: [{ week: 'Week 1', progress: 4 }, { week: 'Week 2', progress: 10 }, { week: 'Week 3', progress: 18 }, { week: 'Week 4', progress: 24 }, { week: 'Week 5', progress: 30 }] },
+    { id: 10, name: "Selena O", email: "selena@gmail.com", progress: 39, color: "#F1C40F", enrolledDate: "2024-02-03", lastActive: "2024-03-16", scores: { python: 48, javascript: 52, java: 45 }, completedLessons: 20, certificates: 1, isBanned: false, progressHistory: [{ week: 'Week 1', progress: 5 }, { week: 'Week 2', progress: 12 }, { week: 'Week 3', progress: 20 }, { week: 'Week 4', progress: 28 }, { week: 'Week 5', progress: 39 }] },
+    { id: 11, name: "Hazel M", email: "hazel@gmail.com", progress: 53, color: "#76D7A4", enrolledDate: "2024-01-22", lastActive: "2024-03-18", scores: { python: 62, javascript: 58, java: 65 }, completedLessons: 31, certificates: 2, isBanned: false, progressHistory: [{ week: 'Week 1', progress: 8 }, { week: 'Week 2', progress: 18 }, { week: 'Week 3', progress: 28 }, { week: 'Week 4', progress: 38 }, { week: 'Week 5', progress: 48 }, { week: 'Week 6', progress: 53 }] },
   ]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showActionModal, setShowActionModal] = useState(false);
+  const [showProgressGraph, setShowProgressGraph] = useState(false);
+  const [graphUser, setGraphUser] = useState(null);
   const [actionType, setActionType] = useState('');
   const [editForm, setEditForm] = useState({ name: '', email: '' });
 
@@ -122,7 +125,7 @@ const UsersPanel = () => {
                       {user.name}
                     </td>
                     <td>{user.email}</td>
-                    <td className={styles.progressCell}>
+                    <td className={styles.progressCell} onClick={() => { setGraphUser(user); setShowProgressGraph(true); }} style={{ cursor: 'pointer' }}>
                       <div className={styles.progressTrack}>
                         <div 
                           className={styles.progressFill} 
@@ -315,6 +318,47 @@ const UsersPanel = () => {
                 {actionType === 'unban' && 'Unban'}
                 {actionType === 'reset' && 'Send Reset Link'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showProgressGraph && graphUser && (
+        <div className={styles.modalOverlay} onClick={() => setShowProgressGraph(false)}>
+          <div className={styles.graphModalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2>{graphUser.name}'s Progress</h2>
+              <button className={styles.closeBtn} onClick={() => setShowProgressGraph(false)}>×</button>
+            </div>
+            <div className={styles.modalBody}>
+              <p className={styles.graphSubtitle}>Progress over time</p>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={graphUser.progressHistory} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="week" axisLine={false} tickLine={false} />
+                  <YAxis axisLine={false} tickLine={false} domain={[0, 100]} />
+                  <Tooltip />
+                  <Line 
+                    type="monotone" 
+                    dataKey="progress" 
+                    name="Progress %" 
+                    stroke={graphUser.color} 
+                    strokeWidth={3} 
+                    dot={{ r: 6, fill: graphUser.color }}
+                    activeDot={{ r: 8 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+              <div className={styles.graphStats}>
+                <div className={styles.graphStatItem}>
+                  <span>Current Progress</span>
+                  <span className={styles.graphStatValue}>{graphUser.progress}%</span>
+                </div>
+                <div className={styles.graphStatItem}>
+                  <span>Weeks Active</span>
+                  <span className={styles.graphStatValue}>{graphUser.progressHistory.length}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

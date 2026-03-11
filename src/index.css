@@ -1,4 +1,3 @@
-@tailwindcss;
 /* index.css */
 /* ============================================
    CSS VARIABLES FOR DARK/LIGHT MODE
@@ -89,6 +88,24 @@ html, body, #root {
   overflow: hidden;
 }
 
+body {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary);
+}
+
 .monaco-editor, .overflow-guard {
   border-radius: 0 0 8px 8px;
+}
+
+@font-face {
+  font-family: "Pokemon";
+  src: url("/public/fonts/Pokemon\ Solid.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body,
+#root,
+.App {
+  background-color: var(--bg-primary);
 }

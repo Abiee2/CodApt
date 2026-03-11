@@ -6,6 +6,7 @@ import './Split.css';
 const CodeEditor = ({ 
   language, 
   concept, 
+  level,
   onBack, 
   onProfileClick, 
   onHomeClick, 
@@ -15,6 +16,8 @@ const CodeEditor = ({
   const [code, setCode] = useState('# Write your code here\nprint("Hello CodApt!")');
   const [output, setOutput] = useState('');
 
+  const [showAssessment, setShowAssessment] = useState(false);
+
   const handleRun = () => {
     try {
       const result = eval(code);  
@@ -22,6 +25,26 @@ const CodeEditor = ({
     } catch (err) {
       setOutput(err.message);
     }
+  };
+
+  const buttonStyle = {
+    padding: "8px 20px",
+    borderRadius: "8px",
+    fontWeight: "900",
+    fontSize: "12px",
+    border: "none",
+    cursor: "pointer",
+    transition: "all 0.2s ease"
+  };
+
+  const buttonHover = (e, color) => {
+    e.target.style.transform = "scale(1.05)";
+    e.target.style.opacity = "0.9";
+  };
+
+  const buttonLeave = (e) => {
+    e.target.style.transform = "scale(1)";
+    e.target.style.opacity = "1";
   };
 
   const getLanguage = (lang) => {
@@ -190,13 +213,28 @@ const CodeEditor = ({
                   />
                   
                   <div style={{ position: 'absolute', bottom: '16px', right: '16px', display: 'flex', gap: '12px', zIndex: 10 }}>
-                    <button 
+                    <button
                         onClick={handleRun}
-                        style={{ backgroundColor: '#facc15', color: 'black', padding: '8px 20px', borderRadius: '8px', fontWeight: '900', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '8px', border: 'none', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
-                    >
-                      <span style={{ fontSize: '10px' }}>▶</span> RUN
+                        onMouseEnter={(e) => buttonHover(e)}
+                        onMouseLeave={buttonLeave}
+                        style={{
+                          ...buttonStyle,
+                          backgroundColor: "#facc15",
+                          color: "black"
+                        }}
+                      >
+                      ▶ RUN
                     </button>
-                    <button style={{ backgroundColor: '#3b82f6', color: 'white', padding: '8px 20px', borderRadius: '8px', fontWeight: '900', fontSize: '12px', border: 'none', cursor: 'pointer', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}>
+                    <button
+                      onClick={() => setShowAssessment(true)}
+                      onMouseEnter={(e) => buttonHover(e)}
+                      onMouseLeave={buttonLeave}
+                      style={{
+                        ...buttonStyle,
+                        backgroundColor: "#3b82f6",
+                        color: "white"
+                      }}
+                    >
                       Submit
                     </button>
                   </div>
@@ -219,13 +257,172 @@ const CodeEditor = ({
 
       {/* Footer */}
       <footer style={{ backgroundColor: '#1e3a8a', padding: '8px 24px', display: 'flex', justifyContent: 'flex-end', gap: '12px', borderTop: '1px solid black', flexShrink: 0 }}>
-        <button onClick={onBack} style={{ padding: '4px 32px', backgroundColor: '#0d1117', color: 'white', borderRadius: '4px', fontWeight: 'bold', fontSize: '14px', border: '1px solid #4b5563', cursor: 'pointer' }}>
-            Back
+        <button
+          onClick={onBack}
+          onMouseEnter={buttonHover}
+          onMouseLeave={buttonLeave}
+          style={{
+            padding: '4px 32px',
+            backgroundColor: '#0d1117',
+            color: 'white',
+            borderRadius: '4px',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            border: '1px solid #4b5563',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          Back
         </button>
-        <button style={{ padding: '4px 32px', backgroundColor: '#0d1117', color: 'white', borderRadius: '4px', fontWeight: 'bold', fontSize: '14px', border: '1px solid #4b5563', cursor: 'pointer' }}>
-            Next
+        <button
+          onMouseEnter={buttonHover}
+          onMouseLeave={buttonLeave}
+          style={{
+            padding: '4px 32px',
+            backgroundColor: '#0d1117',
+            color: 'white',
+            borderRadius: '4px',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            border: '1px solid #4b5563',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          Next
         </button>
       </footer>
+
+      {showAssessment && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0,0,0,0.6)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000
+        }}>
+
+          <div style={{
+            width: "520px",
+            backgroundColor: "#15366d",
+            borderRadius: "14px",
+            border: "2px solid #3b82f6",
+            boxShadow: "0 20px 40px rgba(0,0,0,0.5)",
+            color: "white",
+            fontFamily: "sans-serif"
+          }}>
+
+            {/* Header */}
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "12px 20px",
+              backgroundColor: "#1e3a8a",
+              borderTopLeftRadius: "14px",
+              borderTopRightRadius: "14px",
+              fontWeight: "bold"
+            }}>
+              <span>Task Name: {concept}</span>
+              <span>Difficulty: {level}</span>
+            </div>
+
+            {/* Status */}
+            <div style={{
+              padding: "10px 20px",
+              backgroundColor: "#111827",
+              fontWeight: "bold"
+            }}>
+              Task Status
+            </div>
+
+            <div style={{ padding: "20px" }}>
+
+              <p style={{ marginBottom: "12px", fontWeight: "bold" }}>
+                Score:
+              </p>
+
+              <p style={{ color: "#4ade80" }}>
+                ✔ Output Correct
+              </p>
+
+              <p style={{ color: "#facc15", marginTop: "6px" }}>
+                ⚠ CFG Warning: Missing loop structure
+              </p>
+
+            </div>
+
+            {/* Performance */}
+            <div style={{
+              padding: "10px 20px",
+              backgroundColor: "#111827",
+              fontWeight: "bold"
+            }}>
+              Performance Metrics
+            </div>
+
+            <div style={{
+              display: "flex",
+              borderTop: "1px solid #334155"
+            }}>
+
+              <div style={{
+                flex: 1,
+                padding: "14px",
+                borderRight: "1px solid #334155"
+              }}>
+                Attempts: 1
+              </div>
+
+              <div style={{
+                flex: 1,
+                padding: "14px"
+              }}>
+                Time Spent: 35s
+              </div>
+
+
+            </div>
+              <div style={{
+                borderTop: "1px solid #334155",
+                marginTop: "10px"
+              }}></div>
+
+            {/* Recommendation */}
+            <div style={{ padding: "20px", textAlign: "center" }}>
+              <p style={{ fontWeight: "bold", marginBottom: "12px", textAlign: "left" }}>
+                Next Recommendation:
+              </p>
+
+              <div style={{ display: "flex", justifyContent: "center" }}>
+              <button
+                onClick={() => setShowAssessment(false)}
+                onMouseEnter={(e) => buttonHover(e)}
+                onMouseLeave={buttonLeave}
+                style={{
+                  padding: "10px 32px",
+                  backgroundColor: "#3b82f6",
+                  border: "none",
+                  borderRadius: "10px",
+                  color: "white",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                Continue
+              </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -144,7 +144,7 @@
   padding: 40px;
   text-align: left;
   overflow-y: auto; /* Enable vertical scrolling */
-  height: calc(100vh - 90px); /* Full height minus navbar */
+  min-height: calc(100vh - 90px); /* Full height minus navbar */
   min-height: 0;
 }
 
@@ -156,11 +156,11 @@
 }
 
 .cardGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 30px;
-  justify-items: center;
-  padding-bottom: 40px; 
+  display: flex;
+  flex-wrap: wrap;          /* wrap cards to new line on smaller screens */
+  justify-content: center;  /* center the cards horizontally */
+  gap: 40px;                /* space between cards */
+  padding: 20px;
 }
 
 .card {

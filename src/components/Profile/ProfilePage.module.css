@@ -1,58 +1,88 @@
 /* ProfilePage.module.css */
-/* Light Mode (Default) */
+
+/* --- Variables & Base --- */
+:root {
+  --bg-primary: #f0f4f8;
+  --bg-dark: #1a1a2e;
+  --card-bg: #ffffff;
+  --card-bg-dark: #1b365f;
+  --card-border: #e0e6ed;
+  --card-border-dark: #1e3a5f;
+  --text-color: #333;
+  --text-dark: #e0e0e0;
+  --accent-yellow: #ffcc00;
+  --accent-green: #4caf50;
+  --accent-blue: #3b82f6;
+  --border-color: #ccc;
+  --border-dark: #1e3a5f;
+}
+
 .container {
   min-height: 100vh;
-  background-color: var(--bg-primary, #8ccfff);
+  background-color: var(--bg-primary);
   display: flex;
   flex-direction: column;
   font-family: 'Arial Black', 'Arial Bold', sans-serif;
   transition: background-color 0.3s ease;
+  position: relative;
 }
 
-/* Dark Mode */
 [data-theme="dark"] .container {
-  background-color: #1a1a2e;
+  background-color: var(--bg-dark);
 }
 
-/* Navbar */
+/* --- Navbar --- */
 .navbar {
-  padding: 10px 50px;
+  padding: 15px 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: white;
-  border-bottom: 1px solid #ccc;
-  min-height: 45px;
+  border-bottom: 1px solid var(--border-color);
+  min-height: 70px;
   box-sizing: border-box;
+  position: relative;
+  z-index: 100;
 }
 
 [data-theme="dark"] .navbar {
   background-color: #16213e;
-  border-bottom-color: #1e3a5f;
+  border-bottom-color: var(--border-dark);
 }
-
 
 .logo {
-  height: 45px;
+  height: 50px;
   cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-.navRight {
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.navActions {
   display: flex;
   align-items: center;
   gap: 20px;
-  height: 45px;
+  height: 50px;
 }
 
 .nameBadge {
-  background-color: #4caf50;
+  background-color: var(--accent-green);
   color: white;
-  padding: 4px 15px;
+  padding: 6px 18px;
   border-radius: 20px;
   font-size: 14px;
   cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
+.nameBadge:hover {
+  background-color: #43a047;
+}
+
+/* Theme Toggle */
 .themeToggle {
   background: none;
   border: none;
@@ -60,40 +90,57 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  height: 35px;
+  height: 40px;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
 }
 
-/* Profile Icon */
+.themeToggle:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .themeToggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Profile Wrapper & Icon */
 .profileWrapper {
   position: relative;
   display: flex;
   align-items: center;
-  height: 35px;
+  height: 40px;
 }
 
-.avatarCircleSmall {
-  width: 40px; /* Changed from 30px */
-  height: 40px; /* Changed from 30px */
+.profileIcon {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #333;
   border-radius: 50%;
-  border: 2px solid #333; /* Changed from 1px to 2px */
+  padding: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: #fff; /* Added white background */
   overflow: hidden;
+  background: white;
+  transition: border-color 0.3s ease;
 }
 
-[data-theme="dark"] .avatarCircleSmall {
+[data-theme="dark"] .profileIcon {
   border-color: #aaa;
-  background-color: #1a1a2e;
+  background-color: var(--bg-dark);
+}
+
+.profileIcon:hover {
+  border-color: var(--accent-yellow);
 }
 
 .profilePhoto {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 /* Dropdown */
@@ -102,18 +149,24 @@
   opacity: 0;
   position: absolute;
   top: 100%;
-  right: -10px;
+  right: 0;
   background-color: #1e4baf;
   border-radius: 12px;
-  min-width: 100px;
+  min-width: 120px;
   transition: all 0.3s ease;
   transform: translateY(10px);
-  z-index: 10;
-  margin-top: 5px;
+  z-index: 1000;
+  margin-top: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.profileWrapper:hover .dropdown {
+[data-theme="dark"] .dropdown {
+  background-color: #16213e;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.profileWrapper:hover .dropdown,
+.profileWrapper:focus-within .dropdown {
   visibility: visible;
   opacity: 1;
   transform: translateY(0);
@@ -130,6 +183,10 @@
   right: 15px;
 }
 
+[data-theme="dark"] .arrowUp {
+  border-bottom-color: #16213e;
+}
+
 .menuList {
   list-style: none;
   padding: 10px 0;
@@ -139,7 +196,7 @@
 
 .menuList li a {
   display: block;
-  padding: 8px 15px;
+  padding: 10px 15px;
   color: white;
   text-decoration: none;
   font-size: 14px;
@@ -150,94 +207,43 @@
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Main Content */
-.main {
-  flex: 1;
+/* --- Main Content --- */
+.mainWrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 20px;
+  align-items: stretch;
+  gap: 25px;
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  flex-wrap: wrap;
 }
 
+/* --- Profile Card --- */
 .card {
-  background-color: #1e3a5f;
+  background-color: var(--card-bg);
   width: 620px;
-  height: 700px;
+  min-height: 700px;
   padding: 40px;
   border-radius: 15px;
-  border: 1px solid #ffffffaa;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  position: relative;
 }
 
 [data-theme="dark"] .card {
-  background-color: #1b365f;
-  border-color: #1e3a5f;
+  background-color: var(--card-bg-dark);
+  border-color: var(--card-border-dark);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
 }
 
 .title {
-  color: #ffcc00;
+  color: var(--accent-yellow);
   font-size: 28px;
   margin-bottom: 30px;
   text-align: center;
 }
 
-/* Header Section with Avatar */
-.headerSection {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  margin-bottom: 40px;
-  justify-content: center;
-}
-
-.avatarCircleLarge {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 2px solid #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.profilePhotoLarge {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.cameraIcon {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: rgba(0,0,0,0.5);
-  padding: 4px;
-  border-radius: 50%;
-  font-size: 14px;
-}
-
-.infoLabels {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.labelYellow {
-  color: #ffcc00;
-  font-size: 18px;
-}
-
-.labelYellow span {
-  color: white;
-  margin-left: 10px;
-}
-
-/* Header Section with Avatar */
 .headerSection {
   display: flex;
   align-items: center;
@@ -263,7 +269,7 @@
 
 [data-theme="dark"] .avatarCircleLarge {
   border-color: #aaa;
-  background-color: #1a1a2e;
+  background-color: var(--bg-dark);
 }
 
 .profilePhotoLarge {
@@ -290,7 +296,7 @@
 }
 
 .labelYellow {
-  color: #ffcc00;
+  color: var(--accent-yellow);
   font-size: 18px;
 }
 
@@ -304,14 +310,14 @@
   color: #e0e0e0;
 }
 
-/* Form Styling */
+/* --- Form Styling --- */
 .formGroup {
   margin-bottom: 25px;
   position: relative;
 }
 
 .fieldLabel {
-  color: #ffcc00;
+  color: var(--accent-yellow);
   display: block;
   margin-bottom: 8px;
   font-size: 18px;
@@ -319,41 +325,25 @@
 
 .inputField {
   width: 100%;
-  background-color: #d1d1d1;
-  border: 2px solid #000;
+  background-color: #f5f7fa;
+  border: 2px solid var(--card-border);
   padding: 12px 15px;
   border-radius: 6px;
   font-size: 16px;
   box-sizing: border-box;
 }
 
+[data-theme="dark"] .inputField {
+  background-color: #2a2a40;
+  border-color: #444;
+  color: white;
+}
+
 .inputField:focus {
   outline: none;
-  border-color: #ffcc00;
+  border-color: var(--accent-yellow);
 }
 
-/* Error Text */
-.errorText {
-  color: #ff6b6b;
-  font-size: 12px;
-  position: absolute;
-  bottom: -20px;
-  left: 0;
-}
-
-/* Success Message */
-.successMessage {
-  background-color: #4caf50;
-  color: white;
-  padding: 12px;
-  border-radius: 5px;
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-/* Save Button */
 .saveBtnWrapper {
   display: flex;
   justify-content: center;
@@ -361,7 +351,7 @@
 }
 
 .saveBtn {
-  background-color: #ffcc00;
+  background-color: var(--accent-yellow);
   color: #1e3a5f;
   border: 2px solid #000;
   padding: 10px 50px;
@@ -377,26 +367,13 @@
   box-shadow: none;
 }
 
-
-/* Toast Container - positioned relative to the card */
-.card {
-  background-color: #1e3a5f;
-  width: 620px;
-  height: 700px;
-  padding: 40px;
-  border-radius: 15px;
-  border: 1px solid #ffffffaa;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  position: relative; /* Add this */
-}
-
-/* Toast Notification */
+/* --- Toast --- */
 .toast {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #4caf50;
+  background-color: var(--accent-green);
   color: white;
   padding: 16px 32px;
   border-radius: 12px;
@@ -409,10 +386,6 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   animation: fadeInOut 3s ease-in-out;
   white-space: nowrap;
-}
-
-.toastIcon {
-  font-size: 20px;
 }
 
 @keyframes fadeInOut {
@@ -430,7 +403,416 @@
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
+    transform: translate(-50%, -50%) scale(0.0.8);
   }
 }
 
+/* --- Stats Sidebar & Mini Cards --- */
+.statsSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 380px;
+  min-height: 700px; /* Match card height */
+}
+
+.miniCard {
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  border: 1px solid var(--card-border);
+  padding: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .miniCard {
+  background-color: var(--card-bg-dark);
+  border-color: var(--card-border-dark);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.miniCard:hover {
+  transform: translateY(-2px);
+}
+
+.miniTitle {
+  color: white;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 15px;
+  font-weight: 900;
+}
+
+/* --- Performance Chart Styles --- */
+.chartPlaceholder {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .chartPlaceholder {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* --- Accomplishments / Badge Grid --- */
+.langSelect {
+  width: 100%;
+  background: #1e4baf;
+  color: white;
+  border: 2px solid #ffffff55;
+  border-radius: 25px;
+  padding: 8px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+[data-theme="dark"] .langSelect {
+  background: #16213e;
+  border-color: #ffffff33;
+}
+
+.badgeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.badgeItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.badgeItem:hover { 
+  transform: scale(1.05); 
+}
+
+.badgeItem span {
+  color: white;
+  font-size: 13px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.checkCircle {
+  background: white;
+  width: 100%;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #1e3a5f;
+  border: 1px solid transparent;
+}
+
+.completed .checkCircle {
+  background: #4caf50;
+  color: white;
+  border-color: white;
+}
+
+/* --- Progress Bar --- */
+.progressContainer {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.progressBar {
+  width: 100%;
+  height: 10px;
+  background: #0d213b;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #4caf50, #8bc34a);
+  transition: width 0.4s ease;
+}
+
+.progressText {
+  color: var(--accent-yellow);
+  font-size: 12px;
+}
+
+/* --- Responsive Design --- */
+@media screen and (max-width: 1200px) {
+  .mainWrapper {
+    padding: 30px;
+    gap: 20px;
+  }
+  
+  .card {
+    width: 100%;
+    max-width: 620px;
+  }
+  
+  .statsSidebar {
+    width: 100%;
+    max-width: 380px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .mainWrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .card {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    padding: 30px;
+  }
+  
+  .statsSidebar {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+  }
+  
+  .miniCard {
+    width: 100%;
+  }
+  
+  .navbar {
+    padding: 15px 20px;
+  }
+  
+  .logo {
+    height: 40px;
+  }
+  
+  .navActions {
+    gap: 15px;
+  }
+  
+  .nameBadge {
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+  
+  .headerSection {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .infoLabels {
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .fieldLabel {
+    font-size: 16px;
+  }
+  
+  .saveBtn {
+    padding: 10px 40px;
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 0;
+  }
+  
+  .navbar {
+    padding: 10px 15px;
+    min-height: 60px;
+  }
+  
+  .logo {
+    height: 35px;
+  }
+  
+  .navActions {
+    gap: 10px;
+  }
+  
+  .nameBadge {
+    display: none;
+  }
+  
+  .themeToggle {
+    height: 35px;
+  }
+  
+  .profileIcon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .mainWrapper {
+    padding: 20px 15px;
+    gap: 15px;
+  }
+  
+  .card {
+    padding: 25px 20px;
+    min-height: auto;
+  }
+  
+  .title {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  
+  .headerSection {
+    margin-bottom: 30px;
+  }
+  
+  .avatarCircleLarge {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .infoLabels {
+    gap: 10px;
+  }
+  
+  .labelYellow {
+    font-size: 16px;
+  }
+  
+  .formGroup {
+    margin-bottom: 20px;
+  }
+  
+  .fieldLabel {
+    font-size: 16px;
+  }
+  
+  .inputField {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  
+  .saveBtnWrapper {
+    margin-top: 25px;
+  }
+  
+  .saveBtn {
+    padding: 10px 30px;
+    font-size: 16px;
+  }
+  
+  .statsSidebar {
+    gap: 15px;
+  }
+  
+  .miniCard {
+    padding: 15px;
+  }
+  
+  .miniTitle {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .chartPlaceholder {
+    padding: 10px;
+    min-height: 150px;
+  }
+  
+  .langSelect {
+    padding: 6px;
+    font-size: 12px;
+  }
+  
+  .progressContainer {
+    margin-bottom: 15px;
+  }
+  
+  .progressBar {
+    height: 8px;
+  }
+  
+  .progressText {
+    font-size: 11px;
+  }
+  
+  .badgeGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .badgeItem {
+    padding: 6px;
+  }
+  
+  .badgeItem span {
+    font-size: 11px;
+  }
+  
+  .checkCircle {
+    height: 20px;
+  }
+  
+  .toast {
+    padding: 12px 20px;
+    font-size: 14px;
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .navbar {
+    padding: 10px;
+  }
+  
+  .logo {
+    height: 30px;
+  }
+  
+  .themeToggle {
+    font-size: 20px;
+  }
+  
+  .profileIcon {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .mainWrapper {
+    padding: 15px 10px;
+  }
+  
+  .card {
+    padding: 20px 15px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .avatarCircleLarge {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .miniCard {
+    padding: 12px;
+  }
+  
+  .miniTitle {
+    font-size: 14px;
+  }
+}

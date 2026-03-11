@@ -1,6 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './ProfilePage.module.css';
 import ThemeToggle from '../shared/ThemeToggle';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+
+const MOCK_BADGES = {
+  Java: ['Variables', 'Data Types', 'Operators', 'Conditional', 'Loop', 'Functions', 'Input & Output', 'Error Handling'],
+  Python: ['Variables', 'Data Types', 'Operators', 'Conditional', 'Loop', 'Functions', 'Input & Output', 'Error Handling'],
+  JavaScript: ['Variables', 'Data Types', 'Operators', 'Conditional', 'Loop', 'Functions', 'Input & Output', 'Error Handling']
+};
+
+const performanceData = [
+  { name: 'Day 1', java: 40, python: 24, js: 10 },
+  { name: 'Day 2', java: 30, python: 13, js: 22 },
+  { name: 'Day 3', java: 20, python: 98, js: 22 },
+  { name: 'Day 4', java: 27, python: 39, js: 20 },
+  { name: 'Day 5', java: 18, python: 48, js: 110 },
+];
 
 const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, onLogout }) => {
   const [form, setForm] = useState({ ...userData });
@@ -8,12 +23,20 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, o
   const [showToast, setShowToast] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Auto-hide toast after 3 seconds
+  const [selectedLanguage, setSelectedLanguage] = useState('Java');
+  const [completedBadges, setCompletedBadges] = useState({});
+
+  useEffect(() => {
+    const initialBadges = {};
+    MOCK_BADGES[selectedLanguage].forEach(badge => {
+      initialBadges[badge] = false;
+    });
+    setCompletedBadges(initialBadges);
+  }, [selectedLanguage]);
+
   useEffect(() => {
     if (showToast) {
-      const timer = setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+      const timer = setTimeout(() => setShowToast(false), 3000);
       return () => clearTimeout(timer);
     }
   }, [showToast]);
@@ -28,83 +51,52 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, o
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-    
     onSave(form);
-    setErrors({});
     setShowToast(true);
   };
 
-  // Handle photo change
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm({ ...form, photo: reader.result });
-      };
+      reader.onloadend = () => setForm({ ...form, photo: reader.result });
       reader.readAsDataURL(file);
     }
   };
 
-  // Trigger file input click
-  const triggerFileInput = () => {
-    fileInputRef.current.click();
+  const toggleBadge = (badgeName) => {
+    setCompletedBadges(prev => ({ ...prev, [badgeName]: !prev[badgeName] }));
   };
+
+  const currentBadges = MOCK_BADGES[selectedLanguage];
+  const completedCount = Object.values(completedBadges).filter(Boolean).length;
+  const progressPercentage = currentBadges.length > 0 ? Math.round((completedCount / currentBadges.length) * 100) : 0;
 
   return (
     <div className={styles.container}>
-      {/* Toast Notification */}
-      {showToast && (
-        <div className={styles.toast}>
-          <span className={styles.toastIcon}></span>
-          Save successfully!
-        </div>
-      )}
+      {showToast && <div className={styles.toast}>Save successfully!</div>}
 
-      {/* Navbar */}
       <nav className={styles.navbar}>
-        <img 
-          src="/CODAPT_LOGO.png" 
-          alt="Codapt" 
-          className={styles.logo}
-          onClick={onHomeClick}
-        />
-        
-        <div className={styles.navRight}>
-          <div className={styles.nameBadge} onClick={onHomeClick}>
-            {userData?.name || 'Name'}
-          </div>
-          
-          <ThemeToggle 
-            isDarkMode={isDarkMode} 
-            onClick={toggleTheme}
-          />
-          
+        <img src="/CODAPT_LOGO.png" alt="Codapt" className={styles.logo} onClick={onHomeClick} />
+        <div className={styles.navActions}>
+          <div className={styles.nameBadge}>{userData?.name || 'Name'}</div>
+          <ThemeToggle isDarkMode={isDarkMode} onClick={toggleTheme} />
           <div className={styles.profileWrapper}>
-            <div className={styles.avatarCircleSmall}>
+            <div className={styles.profileIcon} onClick={() => {}}>
               {form.photo ? (
                 <img src={form.photo} alt="Profile" className={styles.profilePhoto} />
               ) : (
-                <svg 
-                  width="18" 
-                  height="18" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2"
-                >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
               )}
             </div>
-            
             <div className={styles.dropdown}>
               <div className={styles.arrowUp}></div>
               <ul className={styles.menuList}>
@@ -116,99 +108,83 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, o
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className={styles.main}>
+      <main className={styles.mainWrapper}>
         <div className={styles.card}>
           <h1 className={styles.title}>Profile</h1>
-          
-          {/* Header Section with Avatar */}
           <div className={styles.headerSection}>
-            <div className={styles.avatarCircleLarge} onClick={triggerFileInput}>
-              {form.photo ? (
-                <img src={form.photo} alt="Profile" className={styles.profilePhotoLarge} />
-              ) : (
-                <svg 
-                  width="40" 
-                  height="40" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2"
-                  style={{ color: '#333' }}
-                >
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              )}
+            <div className={styles.avatarCircleLarge} onClick={() => fileInputRef.current.click()}>
+              {form.photo ? <img src={form.photo} alt="Profile" className={styles.profilePhotoLarge} /> : <span>👤</span>}
               <div className={styles.cameraIcon}>📷</div>
             </div>
-            
-            {/* Hidden file input */}
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handlePhotoChange}
-              accept="image/*"
-              style={{ display: 'none' }}
-            />
-            
+            <input type="file" ref={fileInputRef} onChange={handlePhotoChange} style={{ display: 'none' }} />
             <div className={styles.infoLabels}>
               <div className={styles.labelYellow}>Name : <span>{userData?.name}</span></div>
               <div className={styles.labelYellow}>User Name : <span>{userData?.username}</span></div>
             </div>
           </div>
-
-          {/* Form */}
           <form onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
               <label className={styles.fieldLabel}>Name</label>
-              <input 
-                type="text" 
-                className={styles.inputField}
-                value={form.name || ''}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-              />
-              {errors.name && <span className={styles.errorText}>{errors.name}</span>}
+              <input type="text" className={styles.inputField} value={form.name || ''} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             </div>
-            
             <div className={styles.formGroup}>
               <label className={styles.fieldLabel}>User Name</label>
-              <input 
-                type="text" 
-                className={styles.inputField}
-                value={form.username || ''}
-                onChange={(e) => setForm({ ...form, username: e.target.value })}
-              />
-              {errors.username && <span className={styles.errorText}>{errors.username}</span>}
+              <input type="text" className={styles.inputField} value={form.username || ''} onChange={(e) => setForm({ ...form, username: e.target.value })} />
             </div>
-            
             <div className={styles.formGroup}>
               <label className={styles.fieldLabel}>Email</label>
-              <input 
-                type="email" 
-                className={styles.inputField}
-                value={form.email || ''}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-              />
-              {errors.email && <span className={styles.errorText}>{errors.email}</span>}
+              <input type="email" className={styles.inputField} value={form.email || ''} onChange={(e) => setForm({ ...form, email: e.target.value })} />
             </div>
-            
             <div className={styles.formGroup}>
               <label className={styles.fieldLabel}>Password</label>
-              <input 
-                type="password" 
-                className={styles.inputField}
-                value={form.password || ''}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-              />
+              <input type="password" className={styles.inputField} value={form.password || ''} onChange={(e) => setForm({ ...form, password: e.target.value })} />
             </div>
-
             <div className={styles.saveBtnWrapper}>
-              <button type="submit" className={styles.saveBtn}>
-                Save
-              </button>
+              <button type="submit" className={styles.saveBtn}>Save</button>
             </div>
           </form>
+        </div>
+
+        <div className={styles.statsSidebar}>
+          <div className={styles.miniCard}>
+            <h3 className={styles.miniTitle}>Performance Progress</h3>
+            <div className={styles.chartPlaceholder}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={performanceData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+                  <XAxis dataKey="name" hide />
+                  <YAxis hide domain={[0, 'auto']} />
+                  <Tooltip contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }} />
+                  <Legend iconType="circle" />
+                  <Line type="monotone" dataKey="java" stroke="#FF6700" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                  <Line type="monotone" dataKey="python" stroke="#4B8BBE" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                  <Line type="monotone" dataKey="js" stroke="#F7DF1E" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          <div className={styles.miniCard}>
+            <h3 className={styles.miniTitle}>Accomplish</h3>
+            <select className={styles.langSelect} value={selectedLanguage} onChange={(e) => setSelectedLanguage(e.target.value)}>
+              <option>Java</option>
+              <option>Python</option>
+              <option>JavaScript</option>
+            </select>
+            <div className={styles.progressContainer}>
+              <div className={styles.progressBar}>
+                <div className={styles.progressFill} style={{ width: `${progressPercentage}%` }}></div>
+              </div>
+              <span className={styles.progressText}>{progressPercentage}% Completed</span>
+            </div>
+            <div className={styles.badgeGrid}>
+              {currentBadges.map((item) => (
+                <div key={item} className={`${styles.badgeItem} ${completedBadges[item] ? styles.completed : ''}`} onClick={() => toggleBadge(item)}>
+                  <span>{item}</span>
+                  <div className={styles.checkCircle}>{completedBadges[item] ? '✓' : ''}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
     </div>

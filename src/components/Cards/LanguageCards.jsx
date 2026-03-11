@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './LanguageCards.module.css';
 import ThemeToggle from '../shared/ThemeToggle';
+import LanguageFlipCard from "./LanguageFlipCard";
 
 const LanguageCards = ({ onSelect, isDarkMode, toggleTheme, onProfileClick, onHomeClick, onLogout, userData }) => {
+  const [selectedLang, setSelectedLang] = useState(null);
+
+  const handleCardClick = (lang) => {
+    setSelectedLang(lang);
+    setShowModal(true);
+  };
+
+  const handleLevelSelect = (level) => {
+    setShowModal(false);
+
+    // send the selected language to App.jsx
+    onSelect(selectedLang);
+  };
+
   return (
     <div className={styles.container}>
       {/* Navbar */}
@@ -20,7 +35,6 @@ const LanguageCards = ({ onSelect, isDarkMode, toggleTheme, onProfileClick, onHo
             {userData?.name || 'Name'}
           </div>
           
-          {/* Theme Toggle */}
           <ThemeToggle 
             isDarkMode={isDarkMode} 
             onClick={toggleTheme}
@@ -58,20 +72,51 @@ const LanguageCards = ({ onSelect, isDarkMode, toggleTheme, onProfileClick, onHo
       {/* Main Content */}
       <main className={styles.content}>
         <h1 className={styles.title}>Programming Languages</h1>
-        
+  
+ 
         <div className={styles.cardGrid}>
-          <div className={styles.card} onClick={() => onSelect('java')}>
-            <img src="/JAVA_CARD.png" alt="Java" />
-          </div>
-          
-          <div className={styles.card} onClick={() => onSelect('python')}>
-            <img src="/PYTHON_CARD.png" alt="Python" />
-          </div>
-          
-          <div className={styles.card} onClick={() => onSelect('javascript')}>
-            <img src="/JAVA_SCRIPT_CARD.png" alt="JavaScript" />
-          </div>
+
+        <LanguageFlipCard
+          name="Java"
+          hp="120"
+          type="Fire"
+          color="#FF6700" // orange/red for Java
+          image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png"
+          ability1={{ name:"Flame Compile", damage:40, desc:"Burn through compilation." }}
+          ability2={{ name:"JVM Blast", damage:80, desc:"Virtual machine attack." }}
+          description="Powerful enterprise language used in large backend systems."
+          onClick={() => onSelect("Java")}
+        />
+
+        <LanguageFlipCard
+          name="Python"
+          hp="100"
+          type="Grass"
+          color="#4B8BBE" // blue for Python
+          image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/23.png"
+          ability1={{ name:"Script Coil", damage:30, desc:"Wrap opponents elegantly." }}
+          ability2={{ name:"Data Bite", damage:70, desc:"Process massive datasets instantly." }}
+          description="Flexible snake language loved by AI and data scientists."
+          onClick={() => onSelect("Python")}
+        />
+
+        <LanguageFlipCard
+          name="JavaScript"
+          hp="90"
+          type="Electric"
+          color="#F7DF1E" // yellow for JS
+          image="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
+          ability1={{ name:"Dynamic Shock", damage:30, desc:"Shock enemies with dynamic typing." }}
+          ability2={{ name:"Async Thunder", damage:80, desc:"Async lightning strike." }}
+          description="King of the web powering interactive websites."
+          onClick={() => onSelect("JavaScript")}
+        />
+
+
+
         </div>
+
+
       </main>
     </div>
   );

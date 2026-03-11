@@ -1,19 +1,25 @@
 import React, { useState, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, EffectCoverflow } from 'swiper/modules';
-import { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-coverflow';
 import styles from './ConceptModal.module.css';
 
+// Concept data
 const concepts = [
-  "Variable", "Data Types", "Operators", "Conditional Statements",
-  "Loops", "Functions", "Input & Output", "Error Handling"
+  { name: "Variable", difficulty: "Easy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png" },
+  { name: "Data Types", difficulty: "Easy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/52.png" },
+  { name: "Operators", difficulty: "Easy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/16.png" },
+  { name: "Conditional ", difficulty: "Intermediate", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/19.png" },
+  { name: "Loops", difficulty: "Intermediate", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/41.png" },
+  { name: "Functions", difficulty: "Intermediate", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/50.png" },
+  { name: "Input & Output", difficulty: "Hard", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png" },
+  { name: "Error Handling", difficulty: "Hard", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/149.png" }
 ];
 
-// Concept descriptions data
+// Concept descriptions
 const conceptDescriptions = {
   "Variable": "A container for storing data values. Variables are like boxes that hold information you can use and manipulate in your program.",
   "Data Types": "The classification of data that determines the type of operations that can be performed on it. Common types include numbers, strings, and booleans.",
@@ -25,20 +31,22 @@ const conceptDescriptions = {
   "Error Handling": "Techniques for managing and responding to errors that occur during program execution. Helps prevent crashes and provides better user experience."
 };
 
-const ConceptModal = ({ language, onSelect, onClose }) => {
+const ConceptModal = ({ language, level, onSelect, onClose }) => {
   const [selectedConcept, setSelectedConcept] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
 
+  const filteredConcepts = concepts.filter(c => c.difficulty === level);
+
   const handleConceptClick = (index) => {
-    setSelectedConcept(concepts[index]);
+    setSelectedConcept(filteredConcepts[index].name);
     setActiveIndex(index);
   };
 
   const handleStart = () => {
     if (selectedConcept) {
-      onSelect(selectedConcept);
-      setSelectedConcept(null);
+      onSelect(selectedConcept); // triggers CodeEditor
+
     }
   };
 
@@ -53,99 +61,87 @@ const ConceptModal = ({ language, onSelect, onClose }) => {
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        {/* Close Button */}
-        <button className={styles.closeBtn} onClick={onClose}> ✕ </button>
+        <button className={styles.closeBtn} onClick={onClose}>✕</button>
         <h2 className={styles.modalTitle}>
-          Choose a Concept - {language?.toUpperCase()}
+          Choose a Concept - {language?.toUpperCase()} ({level})
         </h2>
 
-        {/* Show Concept Card if selected */}
         {selectedConcept ? (
           <div className={styles.conceptCardDetail}>
             <div className={styles.cardHeader}>
               <h3 className={styles.cardTitle}>{selectedConcept}</h3>
-              <button className={styles.backBtn} onClick={handleCloseCard}>
-                ← Back
-              </button>
+              <button className={styles.backBtn} onClick={handleCloseCard}>← Back</button>
             </div>
-            
             <div className={styles.cardContent}>
-              <div className={styles.cardIcon}>
-                <span>📚</span>
-              </div>
+              <div className={styles.cardIcon}><span>📚</span></div>
               <p className={styles.cardDescription}>
                 {conceptDescriptions[selectedConcept]}
               </p>
             </div>
-
             <button className={styles.startBtn} onClick={handleStart}>
               <span>▶</span> Start Learning
             </button>
           </div>
         ) : (
-          <div className={styles.conceptCarousel}>
-            {/* Left Navigation Arrow */}
-            <button 
-              className={styles.navArrow} 
-              onClick={() => swiperRef.current.swiper.slidePrev()}
-              disabled={activeIndex === 0}
-            >
-              ←
-            </button>
+          // Start
+<div className={styles.conceptCarousel}>
 
-            {/* Swiper Carousel */}
-            <Swiper
-              ref={swiperRef}
-              modules={[Navigation, Pagination, EffectCoverflow]}
-              effect="coverflow"
-              grabCursor={true}
-              centeredSlides={true}
-              slidesPerView="auto"
-              coverflowEffect={{
-                rotate: 0,
-                stretch: 0,
-                depth: 100,
-                modifier: 2.5,
-                slideShadows: true,
-              }}
-              pagination={{
-                el: `.${styles.dotsContainer}`,
-                clickable: true,
-              }}
-              navigation={{
-                nextEl: `.${styles.navArrowRight}`,
-                prevEl: `.${styles.navArrowLeft}`,
-              }}
-              onSlideChange={handleSlideChange}
-              className={styles.swiperContainer}
-            >
-              {concepts.map((item, index) => (
-                <SwiperSlide key={item} className={styles.swiperSlide}>
-                  <div
-                    className={`${styles.conceptCard} ${activeIndex === index ? styles.activeCard : ''}`}
-                    onClick={() => handleConceptClick(index)}
-                  >
-                    <div className={styles.cardIcon}>
-                      <span>📖</span>
-                    </div>
-                    <span className={styles.cardText}>{item}</span>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+  {/* SWIPER */}
+  <Swiper
+    ref={swiperRef}
+    modules={[Navigation, Pagination, EffectCoverflow]}
+    effect="coverflow"
+    grabCursor={true}
+    centeredSlides={true}
+    slidesPerView="auto"
+    coverflowEffect={{
+      rotate: 0,
+      stretch: 0,
+      depth: 100,
+      modifier: 2.5,
+      slideShadows: true
+    }}
+    pagination={{ el: `.${styles.dotsContainer}`, clickable: true }}
+    onSlideChange={handleSlideChange}
+    className={styles.swiperContainer}
+  >
+    {filteredConcepts.map((item, index) => (
+      <SwiperSlide key={item.name} className={styles.swiperSlide}>
+        <div
+          className={styles.conceptCard}
+          onClick={() => handleConceptClick(index)}
+        >
+          <div className={styles.cardIcon}>📚</div>
+          <div className={styles.cardText}>{item.name}</div>
+        </div>
+      </SwiperSlide>
+    ))}
+  </Swiper>
 
-            {/* Right Navigation Arrow */}
-            <button 
-              className={`${styles.navArrow} ${styles.navArrowRight}`} 
-              onClick={() => swiperRef.current.swiper.slideNext()}
-              disabled={activeIndex === concepts.length - 1}
-            >
-              →
-            </button>
+  {/* ARROWS */}
+  <div className={styles.arrowContainer}>
+    <button
+      className={styles.navArrow}
+      onClick={() => swiperRef.current.swiper.slidePrev()}
+      disabled={activeIndex === 0}
+    >
+      ←
+    </button>
 
-            {/* Dots Indicator */}
-            <div className={styles.dotsContainer}></div>
-          </div>
+    <button
+      className={styles.navArrow}
+      onClick={() => swiperRef.current.swiper.slideNext()}
+      disabled={activeIndex === filteredConcepts.length - 1}
+    >
+      →
+    </button>
+  </div>
+
+  {/* DOTS */}
+  <div className={styles.dotsContainer}></div>
+
+</div>
+          // end of concept carousel
         )}
       </div>
     </div>

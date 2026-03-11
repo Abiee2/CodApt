@@ -1,0 +1,141 @@
+/* LanguageFlipCard.css */
+.flipCard {
+  width: 400px;
+  aspect-ratio: 420 / 590;
+  perspective: 1200px;
+  margin: 20px;
+  flex-shrink: 0;
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+
+/* inner container */
+.flipInner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s ease;
+  transform-origin: center center;
+  transform: rotateY(180deg);
+}
+
+/* hover flip */
+.flipCard:hover .flipInner {
+  transform: rotateY(0deg);
+}
+
+/* front and back share exact dimensions */
+.cardFront,
+.cardBack {
+  position: absolute;
+  inset: 0; /* replaces top/left/width/height */
+  border-radius: 16px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  border: 10px solid #000;
+  transform-origin: center center;
+}
+
+/* FRONT CARD */
+.cardFront {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  transform: rotateY(0deg);
+}
+
+/* BACK CARD */
+.cardBackLogo {
+  width: 70%;
+  height: auto;
+  object-fit: contain;
+}
+
+.cardBack {
+  background: linear-gradient(180deg,#1a237e,#283593);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight:  bolder;
+  transform: rotateY(180deg);
+}
+
+/* HEADER */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.cardName {
+  font-weight: 700;
+}
+
+.cardHP {
+  color: red;
+}
+
+/* IMAGE */
+.cardImageWrapper {
+  width: 100%;
+  height: 50%;
+  background: white;
+  border-radius: 8px;
+  border: 3px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0;
+  overflow: hidden;
+}
+
+.cardImageWrapper img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+/* TYPE */
+.cardType {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin: 5px 0;
+  color: white;
+}
+
+/* ATTACKS */
+.attacks {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.attack {
+  border-top: 1px solid #444;
+  padding: 6px 0;
+}
+
+.attackName {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.attackDamage {
+  float: right;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* DESCRIPTION */
+.description {
+  margin-top: auto;
+  font-size: 16px;
+  border-top: 1px solid #444;
+  padding-top: 6px;
+  color: white;
+}
+

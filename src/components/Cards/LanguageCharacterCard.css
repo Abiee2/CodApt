@@ -1,0 +1,38 @@
+.card{
+  width:260px;
+  background:#89CFF0;
+  border:4px solid gold;
+  border-radius:12px;
+  padding:10px;
+  font-family:Arial;
+  box-shadow:0 6px 15px rgba(0,0,0,0.2);
+}
+
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  font-weight:bold;
+}
+
+.card-image img{
+  width:100%;
+}
+
+.card-body{
+  margin-top:10px;
+}
+
+.attack{
+  margin-bottom:10px;
+}
+
+.attack span{
+  float:right;
+}
+
+.description{
+  font-size:12px;
+  margin-top:8px;
+  opacity:0.8;
+}
+

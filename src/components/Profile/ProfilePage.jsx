@@ -17,7 +17,10 @@ const performanceData = [
   { name: 'Day 5', java: 18, python: 48, js: 110 },
 ];
 
-const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, onLogout }) => {
+
+
+
+const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, onLogout, progress = {} }) => {
   const [form, setForm] = useState({ ...userData });
   const [errors, setErrors] = useState({});
   const [showToast, setShowToast] = useState(false);
@@ -26,13 +29,71 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, o
   const [selectedLanguage, setSelectedLanguage] = useState('Java');
   const [completedBadges, setCompletedBadges] = useState({});
 
-  useEffect(() => {
-    const initialBadges = {};
-    MOCK_BADGES[selectedLanguage].forEach(badge => {
-      initialBadges[badge] = false;
+  const [progressPercent, setProgressPercent] = useState(0);
+
+   const [chartData, setChartData] = useState([]);
+
+  // REPLACE calculateLanguageProgress function:
+  const calculateLanguageProgress = (language) => {
+    const badges = MOCK_BADGES[language] || [];
+    const langProgress = progress[language] || {};
+    
+    let totalTasks = 0;
+    let completedTasks = 0;
+    
+    badges.forEach(badge => {
+      const badgeData = langProgress[badge];
+      const tasks = badgeData?.tasksCompleted || 0;
+      const total = badgeData?.totalTasks || 3;
+      
+      totalTasks += total;
+      completedTasks += tasks;
     });
-    setCompletedBadges(initialBadges);
-  }, [selectedLanguage]);
+    
+    const percentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    
+    return {
+      completedTasks,
+      totalTasks,
+      percentage,
+      badgesCompleted: badges.filter(badge => langProgress[badge]?.tasksCompleted >= 3).length,
+      totalBadges: badges.length
+    };
+  };
+
+  // ✅ FIXED: Generate real chart data from progress
+  const generateChartData = () => {
+    const languages = ['Java', 'Python', 'JavaScript'];
+    const days = 5;
+    const chartData = [];
+    
+    for (let day = 1; day <= days; day++) {
+      const dayData = { name: `Day ${day}` };
+      languages.forEach(lang => {
+        // Simulate recent progress based on actual completion
+        const langProgress = calculateLanguageProgress(lang);
+        const baseScore = langProgress.percentage * 2; // Scale to chart range
+        dayData[lang.toLowerCase()] = Math.max(0, baseScore + (Math.random() * 20 - 10)); // Add variation
+      });
+      chartData.push(dayData);
+    }
+    
+    return chartData;
+  };
+
+  useEffect(() => {
+    setChartData(generateChartData());
+  }, [progress]);
+
+  useEffect(() => {
+    const currentBadges = MOCK_BADGES[selectedLanguage] || [];
+    const completedCount = currentBadges.filter(badge => 
+      progress[selectedLanguage]?.[badge]  // ✅ Safe access
+    ).length;
+    const percentage = currentBadges.length > 0 ? Math.round((completedCount / currentBadges.length) * 100) : 0;
+    setProgressPercent(percentage);
+  }, [selectedLanguage, progress]);  // ✅ Remove undefined 'progress' dependency
+
 
   useEffect(() => {
     if (showToast) {
@@ -73,9 +134,10 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, o
     setCompletedBadges(prev => ({ ...prev, [badgeName]: !prev[badgeName] }));
   };
 
+  const currentProgress = calculateLanguageProgress(selectedLanguage);
   const currentBadges = MOCK_BADGES[selectedLanguage];
   const completedCount = Object.values(completedBadges).filter(Boolean).length;
-  const progressPercentage = currentBadges.length > 0 ? Math.round((completedCount / currentBadges.length) * 100) : 0;
+  const progressPercentage = currentProgress.percentage;
 
   return (
     <div className={styles.container}>
@@ -149,7 +211,7 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, o
           <div className={styles.miniCard}>
             <h3 className={styles.miniTitle}>Performance Progress</h3>
             <div className={styles.chartPlaceholder}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={performanceData}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
                   <XAxis dataKey="name" hide />
@@ -163,27 +225,70 @@ const ProfilePage = ({ userData, onSave, isDarkMode, toggleTheme, onHomeClick, o
               </ResponsiveContainer>
             </div>
           </div>
+          {/* Mini Card */}
           <div className={styles.miniCard}>
-            <h3 className={styles.miniTitle}>Accomplish</h3>
+            <h3 className={styles.miniTitle}>Accomplishments</h3>
             <select className={styles.langSelect} value={selectedLanguage} onChange={(e) => setSelectedLanguage(e.target.value)}>
               <option>Java</option>
               <option>Python</option>
               <option>JavaScript</option>
             </select>
+            
             <div className={styles.progressContainer}>
               <div className={styles.progressBar}>
-                <div className={styles.progressFill} style={{ width: `${progressPercentage}%` }}></div>
+                <div className={styles.progressFill} style={{ width: `${currentProgress.percentage}%` }}></div>
               </div>
-              <span className={styles.progressText}>{progressPercentage}% Completed</span>
+              <span className={styles.progressText}>
+                {currentProgress.completedTasks}/{currentProgress.totalTasks} tasks 
+                ({currentProgress.percentage}%)
+              </span>
             </div>
-            <div className={styles.badgeGrid}>
-              {currentBadges.map((item) => (
-                <div key={item} className={`${styles.badgeItem} ${completedBadges[item] ? styles.completed : ''}`} onClick={() => toggleBadge(item)}>
-                  <span>{item}</span>
-                  <div className={styles.checkCircle}>{completedBadges[item] ? '✓' : ''}</div>
-                </div>
-              ))}
-            </div>
+
+              {/* Accomplish Card */}
+          <div className={styles.accomplishList}>
+          {currentBadges.map((concept) => {
+            const data = progress?.[selectedLanguage]?.[concept] || {
+              tasksCompleted: 0,
+              totalTasks: 3,
+              successRate: 0
+            };
+  
+  const isCompleted = data.tasksCompleted >= data.totalTasks;
+  const completionRate = (data.tasksCompleted / data.totalTasks) * 100;
+
+  return (
+    <div key={concept} className={styles.accomplishItem}>
+      <p className={styles.accomplishTitle}>
+        {concept} 
+        <span style={{ 
+          color: isCompleted ? '#4ade80' : '#94a3b8',
+          fontSize: '12px',
+          marginLeft: '8px'
+        }}>
+          {isCompleted ? '✓ Complete' : data.tasksCompleted > 0 ? `○ ${data.tasksCompleted}/${data.totalTasks}` : '○ Start'}
+        </span>
+      </p>
+
+      <div className={styles.accomplishBar}>
+        <div
+          className={styles.accomplishFill}
+          style={{ 
+            width: `${completionRate}%`,
+            background: isCompleted ? '#4ade80' : data.tasksCompleted > 0 ? '#60a5fa' : '#94a3b8'
+          }}
+        ></div>
+      </div>
+
+      <p className={styles.accomplishRate}>
+        {data.tasksCompleted}/{data.totalTasks} Tasks • {Math.round(data.successRate)}%
+      </p>
+    </div>
+  );
+})}
+            {/*  */}
+          </div>
+
+
           </div>
         </div>
       </main>

@@ -1,31 +1,163 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import Split from 'react-split';
 import './Split.css';
+import { PYTHON_EASY_TASKS } from '../../data/pythonEasyTasks';
+import { analyzePythonVariable } from "../../utils/pythonAnalyzer";
+import { recommendNextTask } from "../../utils/recommendNextTask";
 
-const CodeEditor = ({ 
-  language, 
-  concept, 
-  level,
-  onBack, 
-  onProfileClick, 
-  onHomeClick, 
-  onLogout, 
-  userData 
-}) => {
-  const [code, setCode] = useState('# Write your code here\nprint("Hello CodApt!")');
-  const [output, setOutput] = useState('');
+  const CodeEditor = ({ 
+    language, 
+    concept, 
+    level,
+    onBack, 
+    onProfileClick, 
+    onHomeClick, 
+    onLogout, 
+    onCompleteTask,
+    userData,
+    currentTaskIndex,
+  onNextTask
+  }) => {
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [code, setCode] = useState('# Write your code here\nprint("Hello CodApt!")');
+    const [output, setOutput] = useState('');
+    const [showAssessment, setShowAssessment] = useState(false);
+    const [attempts, setAttempts] = useState(0);
+    const [startTime] = useState(Date.now());
+    const [timeSpent, setTimeSpent] = useState(0);           
+    const [recommendation, setRecommendation] = useState(''); 
+    const [assessmentResult, setAssessmentResult] = useState({ 
+      correct: false,
+      attempts: 0,
+      timeSpent: 0,
+      feedback: [],
+      recommendation: ''
+    });
 
-  const [showAssessment, setShowAssessment] = useState(false);
+  const executePythonCode = (code) => {
+    const lines = code.split('\n')
+      .map(line => line.trim())
+      .filter(line => line && !line.startsWith('#'));
 
-  const handleRun = () => {
-    try {
-      const result = eval(code);  
-      setOutput(String(result));
-    } catch (err) {
-      setOutput(err.message);
+    let output = '';
+    const context = {};
+
+    for (let line of lines) {
+      // Variable assignments
+      if (line.includes('=') && !line.includes('print')) {
+        const match = line.match(/(.+?)\s*=\s*(.+)/);
+        if (match) {
+          const varName = match[1].trim();
+          let expr = match[2].trim();
+          try {
+            // Safely parse numbers, booleans, and strings
+            if (/^['"].*['"]$/.test(expr)) {
+              context[varName] = expr.slice(1, -1); // string
+            } else if (!isNaN(Number(expr))) {
+              context[varName] = Number(expr); // number
+            } else if (expr === 'True' || expr === 'False') {
+              context[varName] = expr === 'True'; // boolean
+            } else if (context[expr] !== undefined) {
+              context[varName] = context[expr]; // existing variable
+            } else {
+              context[varName] = expr; // fallback
+            }
+          } catch (e) {
+            console.log('Assignment error:', e);
+          }
+        }
+      }
+      // Print statements
+      else if (line.includes('print(')) {
+        const printMatch = line.match(/print\s*\(\s*(.+?)\s*\)/);
+        if (printMatch) {
+          let expr = printMatch[1].trim();
+          let result = expr;
+
+          // Replace variable names with their values safely
+          result = result.replace(/\b[a-zA-Z_]\w*\b/g, (name) => {
+            if (context[name] !== undefined) {
+              const val = context[name];
+              return typeof val === 'string' ? `"${val}"` : val;
+            }
+            return name;
+          });
+
+          try {
+            output += eval(result) + '\n';
+          } catch (e) {
+            output += 'ERROR\n';
+          }
+        }
+      }
     }
+
+    return output.trim() || 'No output';
   };
+  // end
+
+  // Update handleRun:
+  const handleRun = () => {
+    const result = executePythonCode(code);
+    setOutput(result);
+  };
+
+
+  const task = PYTHON_EASY_TASKS[currentTaskIndex] || PYTHON_EASY_TASKS[0];
+
+
+const handleSubmit = () => {
+  const newAttempts = attempts + 1;
+  setAttempts(newAttempts);
+
+  const result = analyzePythonVariable(code, task);
+  const seconds = Math.floor((Date.now() - startTime) / 1000);
+  setTimeSpent(seconds);
+
+  const rec = recommendNextTask(newAttempts, seconds, result.correct, currentTaskIndex);
+  setRecommendation(rec);
+
+  // Update assessment display with real data
+  setAssessmentResult({
+    correct: result.correct,
+    attempts: newAttempts,
+    timeSpent: seconds,
+    feedback: result.feedback,
+    output: result.output,
+    expected: task.expectedOutput,
+    recommendation: rec,
+    nextTaskIndex: result.correct
+  ? (currentTaskIndex < PYTHON_EASY_TASKS.length - 1
+      ? currentTaskIndex + 1
+      : 'Complete!')
+  : currentTaskIndex
+  });
+
+  setAttempts(newAttempts);
+  setTimeSpent(seconds);
+  setRecommendation(rec);
+  
+  if (result.correct) {
+    onCompleteTask(language, concept, currentTaskIndex + 1);
+  }
+
+    setShowAssessment(true);
+  };
+
+  useEffect(() => {
+    const currentTask = PYTHON_EASY_TASKS[currentTaskIndex];
+    if (currentTask) {
+      // ✅ CLEAN STARTER CODE - ONLY line numbers
+      setCode(`# Task ${currentTask.id}: ${currentTask.title}\n\n# Write your code here:\n\nprint("Replace this line!")`);
+      
+      setOutput('');
+      setAttempts(0);
+      setTimeSpent(0);
+      setRecommendation('');
+    }
+  }, [currentTaskIndex]);
+
 
   const buttonStyle = {
     padding: "8px 20px",
@@ -93,21 +225,20 @@ const CodeEditor = ({
           </div>
           
           {/* Profile Icon - No Dropdown */}
-          <div 
-            style={{ 
-              width: '40px', 
-              height: '40px', 
-              borderRadius: '50%', 
-              border: '2px solid #333',
-              padding: '2px',
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              cursor: 'pointer',
-              overflow: 'hidden',
-              backgroundColor: '#fff',
-            }}
-          >
+          <div style={{ position: 'relative' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            borderRadius: '50%', 
+            border: '2px solid #333',
+            padding: '2px',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            cursor: 'pointer',
+            overflow: 'hidden',
+            backgroundColor: '#fff',
+          }}>
             {userData?.photo ? (
               <img 
                 src={userData.photo} 
@@ -121,6 +252,15 @@ const CodeEditor = ({
               </svg>
             )}
           </div>
+
+          {/* Dropdown */}
+          <div className="editorDropdown">
+            {/* <div onClick={onHomeClick}>Home</div> */}
+            <div onClick={onProfileClick}>Profile</div>
+            <div onClick={onLogout} style={{ color: '#f87171' }}>Logout</div>
+          </div>
+        </div>
+
         </div>
       </header>
 
@@ -158,10 +298,17 @@ const CodeEditor = ({
                 <div style={{ flex: 1, padding: '24px', overflow: 'auto' }}>
                   <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px' }}>Instructions</h2>
                   <div style={{ width: '100%', minHeight: '100%', backgroundColor: 'rgba(13, 17, 23, 0.5)', borderRadius: '8px', border: '1px solid #374151', padding: '16px' }}>
-                    <p style={{ color: '#d1d5db' }}>
-                      Welcome to {concept}! Learn how to use {concept.toLowerCase()} in {language}.
-                      Write your code in the editor on the right.
-                    </p>
+                  <div style={{
+                  margin: '8px 0',
+                  whiteSpace: 'pre-line',
+                  lineHeight: '1.7',
+                  fontSize: '15px',      
+                  fontFamily: '"SF Mono", Monaco, "Cascadia Code", Consolas, monospace', // ✅ Developer font
+                  color: '#f1f5f9',        
+                  letterSpacing: '0.3px' 
+                  }}>
+                    {task?.instruction || 'Write code to practice ' + concept}
+                  </div>
                   </div>
                 </div>
               </aside>
@@ -194,11 +341,13 @@ const CodeEditor = ({
             >
               {/* Code Editor */}
               <div style={{ display: 'flex', flexDirection: 'column', position: 'relative', minHeight: 0, backgroundColor: 'white' }}>
-                <div style={{ backgroundColor: '#1e3a8a', padding: '8px 16px', fontSize: '14px', fontWeight: 'bold', color: '#dbeafe', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
-                  <span>{concept}.{language === 'python' ? 'py' : language === 'java' ? 'java' : 'js'}</span>
+                <div style={{ backgroundColor: '#1e3a8a', padding: '8px 16px', fontSize: '14px', fontWeight: 'bold', 
+                            color: '#dbeafe', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+                  <span>{concept}.{language?.toLowerCase() === 'python' ? 'py' : language?.toLowerCase() === 'java' ? 'java' : 'js'}</span>
                 </div>
                 <div style={{ flex: 1, minHeight: 0 }}>
                   <Editor
+                    key={currentTaskIndex} 
                     height="100%"
                     language={getLanguage(language)}
                     theme="light"
@@ -226,7 +375,7 @@ const CodeEditor = ({
                       ▶ RUN
                     </button>
                     <button
-                      onClick={() => setShowAssessment(true)}
+                      onClick={handleSubmit}
                       onMouseEnter={(e) => buttonHover(e)}
                       onMouseLeave={buttonLeave}
                       style={{
@@ -293,136 +442,112 @@ const CodeEditor = ({
           Next
         </button>
       </footer>
-
+      {/* start of assessment */}
       {showAssessment && (
         <div style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "rgba(0,0,0,0.6)",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          zIndex: 1000
+          position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
+          backgroundColor: "rgba(0,0,0,0.6)", display: "flex", justifyContent: "center", 
+          alignItems: "center", zIndex: 1000
         }}>
-
           <div style={{
-            width: "520px",
-            backgroundColor: "#15366d",
-            borderRadius: "14px",
-            border: "2px solid #3b82f6",
-            boxShadow: "0 20px 40px rgba(0,0,0,0.5)",
-            color: "white",
-            fontFamily: "sans-serif"
+            width: "520px", backgroundColor: "#15366d", borderRadius: "14px",
+            border: "2px solid #3b82f6", boxShadow: "0 20px 40px rgba(0,0,0,0.5)",
+            color: "white", fontFamily: "sans-serif"
           }}>
-
             {/* Header */}
             <div style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "12px 20px",
-              backgroundColor: "#1e3a8a",
-              borderTopLeftRadius: "14px",
-              borderTopRightRadius: "14px",
+              display: "flex", justifyContent: "space-between", padding: "12px 20px",
+              backgroundColor: "#1e3a8a", borderTopLeftRadius: "14px", borderTopRightRadius: "14px",
               fontWeight: "bold"
             }}>
-              <span>Task Name: {concept}</span>
+              <span>Task: {concept}</span>
               <span>Difficulty: {level}</span>
             </div>
 
-            {/* Status */}
-            <div style={{
-              padding: "10px 20px",
-              backgroundColor: "#111827",
-              fontWeight: "bold"
-            }}>
+            {/* Status - DYNAMIC */}
+            <div style={{ padding: "10px 20px", backgroundColor: "#111827", fontWeight: "bold" }}>
               Task Status
             </div>
-
             <div style={{ padding: "20px" }}>
-
-              <p style={{ marginBottom: "12px", fontWeight: "bold" }}>
-                Score:
+              <p style={{ marginBottom: "12px", fontWeight: "bold" }}>Score:</p>
+              
+              {/* Correct/Incorrect Status */}
+              <p style={{ 
+                color: assessmentResult.correct ? "#4ade80" : "#ef4444",
+                fontSize: "16px", fontWeight: "bold"
+              }}>
+                {assessmentResult.correct ? '✔ CORRECT' : '✘ INCORRECT'}
               </p>
 
-              <p style={{ color: "#4ade80" }}>
-                ✔ Output Correct
-              </p>
-
-              <p style={{ color: "#facc15", marginTop: "6px" }}>
-                ⚠ CFG Warning: Missing loop structure
-              </p>
-
+              {/* Feedback */}
+              {assessmentResult.feedback?.map((msg, i) => (
+                <p key={i} style={{ 
+                  color: "#facc15", marginTop: "6px", fontSize: "14px"
+                }}>
+                  ⚠ {msg}
+                </p>
+              ))}
             </div>
 
-            {/* Performance */}
-            <div style={{
-              padding: "10px 20px",
-              backgroundColor: "#111827",
-              fontWeight: "bold"
-            }}>
+            {/* Performance - DYNAMIC */}
+            <div style={{ padding: "10px 20px", backgroundColor: "#111827", fontWeight: "bold" }}>
               Performance Metrics
             </div>
-
-            <div style={{
-              display: "flex",
-              borderTop: "1px solid #334155"
-            }}>
-
-              <div style={{
-                flex: 1,
-                padding: "14px",
-                borderRight: "1px solid #334155"
-              }}>
-                Attempts: 1
+            <div style={{ display: "flex", borderTop: "1px solid #334155" }}>
+              <div style={{ flex: 1, padding: "14px", borderRight: "1px solid #334155" }}>
+                Attempts: <span style={{ fontWeight: "bold", color: "#4ade80" }}>
+                  {assessmentResult.attempts}
+                </span>
               </div>
-
-              <div style={{
-                flex: 1,
-                padding: "14px"
-              }}>
-                Time Spent: 35s
+              <div style={{ flex: 1, padding: "14px" }}>
+                Time: <span style={{ fontWeight: "bold", color: "#4ade80" }}>
+                  {assessmentResult.timeSpent}s
+                </span>
               </div>
-
-
             </div>
-              <div style={{
-                borderTop: "1px solid #334155",
-                marginTop: "10px"
-              }}></div>
 
-            {/* Recommendation */}
+            {/* Recommendation - DYNAMIC */}
             <div style={{ padding: "20px", textAlign: "center" }}>
-              <p style={{ fontWeight: "bold", marginBottom: "12px", textAlign: "left" }}>
-                Next Recommendation:
+              <p style={{ marginBottom: "10px", fontWeight: "bold" }}>
+                Recommended Next Task:
               </p>
+              <p style={{ color: "#4ade80", fontSize: "16px" }}>
+                {assessmentResult.recommendation || 'Practice more!'}
+              </p>
+              <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                <button
+                  onClick={() => {
+                  setShowAssessment(false);
 
-              <div style={{ display: "flex", justifyContent: "center" }}>
-              <button
-                onClick={() => setShowAssessment(false)}
-                onMouseEnter={(e) => buttonHover(e)}
-                onMouseLeave={buttonLeave}
-                style={{
-                  padding: "10px 32px",
-                  backgroundColor: "#3b82f6",
-                  border: "none",
-                  borderRadius: "10px",
-                  color: "white",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                Continue
-              </button>
+                      if (assessmentResult.nextTaskIndex === 'Complete!') {
+                        // Let parent handle the full reset
+                        onNextTask?.('Complete!');
+                        return;
+                      }
+
+                      if (onNextTask && typeof assessmentResult.nextTaskIndex === 'number') {
+                        onNextTask(assessmentResult.nextTaskIndex);
+                      }
+                    }}
+                  
+                  style={{
+                    padding: "10px 32px", backgroundColor: "#3b82f6", border: "none",
+                    borderRadius: "10px", color: "white", fontWeight: "bold",
+                    cursor: "pointer", fontSize: "14px"
+                  }}
+                >
+                  {!assessmentResult.correct
+                    ? 'Retake Task'
+                    : assessmentResult.nextTaskIndex === 'Complete!'
+                      ? 'Finish!'
+                      : 'Continue to Next'}
+                </button>
               </div>
             </div>
-
           </div>
         </div>
       )}
+      {/* end of assessment */}
     </div>
   );
 };

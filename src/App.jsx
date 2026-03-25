@@ -20,6 +20,9 @@ function App() {
 
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
+  const [completedTasks, setCompletedTasks] = useState([]);
+
   const [userData, setUserData] = useState({
     name: 'John Doe',
     username: 'johndoe',
@@ -35,7 +38,32 @@ function App() {
     );
   }, [isDarkMode]);
 
-  
+  const [progress, setProgress] = useState({
+    Python: {
+      Variables: {
+        tasksCompleted: 0,
+        totalTasks: 3,
+        successRate: 0,
+        avgAttempts: 0
+      }
+    }
+  });
+
+  const handleCompleteTask = (language, concept, taskId) => {
+    setProgress(prev => ({
+      ...prev,
+      [language]: {
+        ...prev[language],
+        [concept]: {
+          tasksCompleted: Math.max(prev[language]?.[concept]?.tasksCompleted || 0, taskId),
+          totalTasks: 3,
+          successRate: Math.round((taskId / 3) * 100),
+          avgAttempts: 2.5 
+        }
+      }
+    }));
+  };
+
   const handleSaveProfile = (formData) => setUserData(formData);
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
@@ -66,7 +94,7 @@ function App() {
   if (currentPage === 'signup') return <SignUp isDarkMode={isDarkMode} toggleTheme={toggleTheme} onSignUp={(data)=>{setUserData(data); goToLanguages()}} onLogin={goToLogin} onHome={goToLanding} />;
   if (currentPage === 'login') return <Login isDarkMode={isDarkMode} toggleTheme={toggleTheme} onLogin={(loginData)=>{loginData?.isAdmin ? (setIsAdmin(true), goToAdmin()) : (setUserData(loginData || userData), goToLanguages())}} onSignUp={goToSignUp} onHome={goToLanding} />;
   if (currentPage === 'admin') return <AdminDashboard isDarkMode={isDarkMode} toggleTheme={toggleTheme} />;
-  if (currentPage === 'profile') return <ProfilePage userData={userData} onSave={handleSaveProfile} isDarkMode={isDarkMode} toggleTheme={toggleTheme} onHomeClick={goToLanguages} onLogout={handleLogout} />;
+  if (currentPage === 'profile') return <ProfilePage userData={userData} onSave={handleSaveProfile} isDarkMode={isDarkMode} toggleTheme={toggleTheme} onHomeClick={goToLanguages} onLogout={handleLogout} progress={progress} />;
 
   // MAIN FLOW
 return (
@@ -116,8 +144,21 @@ return (
         onProfileClick={goToProfile}
         onHomeClick={goToLanguages}
         onLogout={handleLogout}
+        onCompleteTask={handleCompleteTask}
         userData={userData}
         isDarkMode={isDarkMode}
+        progress={progress} 
+        currentTaskIndex={currentTaskIndex}
+        onNextTask={(nextIndex) => {
+          if (nextIndex === 'Complete!') {
+            setCurrentTaskIndex(0);
+            setSelectedConcept(null); // ← ADD THIS LINE
+            setSelectedLevel(null);   
+            return;
+          }
+
+          setCurrentTaskIndex(nextIndex);
+        }}
       />
     )}
 

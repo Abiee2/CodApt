@@ -7,9 +7,10 @@ import 'swiper/css/pagination';
 import 'swiper/css/effect-coverflow';
 import styles from './ConceptModal.module.css';
 
+
 // Concept data
 const concepts = [
-  { name: "Variable", difficulty: "Easy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png" },
+  { name: "Variables", difficulty: "Easy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png" },
   { name: "Data Types", difficulty: "Easy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/52.png" },
   { name: "Operators", difficulty: "Easy", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/16.png" },
   { name: "Conditional ", difficulty: "Intermediate", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/19.png" },
@@ -21,7 +22,7 @@ const concepts = [
 
 // Concept descriptions
 const conceptDescriptions = {
-  "Variable": "A container for storing data values. Variables are like boxes that hold information you can use and manipulate in your program.",
+  "Variables": "A container for storing data values. Variables are like boxes that hold information you can use and manipulate in your program.",
   "Data Types": "The classification of data that determines the type of operations that can be performed on it. Common types include numbers, strings, and booleans.",
   "Operators": "Symbols that perform operations on values or variables. Examples include arithmetic (+, -, *, /), comparison (==, >, <), and logical (&&, ||) operators.",
   "Conditional Statements": "Code blocks that execute different actions based on whether a condition is true or false. Common examples include if, else, and switch statements.",

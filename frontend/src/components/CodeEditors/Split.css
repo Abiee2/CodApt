@@ -91,22 +91,10 @@ div:hover > .editorDropdown {
   transform: translateY(0);
 }
 
-/* Items */
-.editorDropdown div {
-  padding: 10px;
-  cursor: pointer;
-  color: white;
-  text-align: center;
-  transition: background 0.2s;
-}
-
-.editorDropdown div:hover {
-  background: rgba(255,255,255,0.1);
-}
 
 /* Instructions panel */
 .instructions-panel {
-  /* white-space: pre-line !important; */
+  white-space: pre-line !important;
   line-height: 1.6 !important;
 }
 
@@ -114,4 +102,16 @@ div:hover > .editorDropdown {
 aside div[style*="padding: '24px'"] {
   white-space: pre-line;
   line-height: 1.6;
+}
+
+/* Compact Instructions */
+aside {
+  font-family: 'SF Mono', Monaco, Consolas, monospace !important;
+}
+
+/* Better instruction text */
+.instruction-text {
+  white-space: pre-line !important;
+  line-height: 1.6 !important;
+  font-feature-settings: "liga" 0 !important; /* Disable ligatures */
 }

@@ -1,10 +1,11 @@
 /* LanguageFlipCard.css */
 .flipCard {
   width: 400px;
+   max-width: 90vw;
   aspect-ratio: 420 / 590;
   perspective: 1200px;
-  margin: 20px;
-  flex-shrink: 0;
+  margin: 20px auto;
+  flex-shrink: 1;
   display: block;
   position: relative;
   cursor: pointer;
@@ -139,3 +140,28 @@
   color: white;
 }
 
+
+/* RESPONSIVE CARD SIZE */
+@media (max-width: 768px) {
+  .flipCard {
+    width: 100% !important; /* ✅ Full width */
+    max-width: 380px;
+    margin: 0 auto 20px !important; /* ✅ Center & spacing */
+    aspect-ratio: 3/4.2; /* ✅ Slightly adjusted for mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .flipCard {
+    aspect-ratio: 3/4; /* ✅ Perfect mobile ratio */
+  }
+  
+  .cardFront {
+    padding: 16px !important; /* ✅ Smaller padding */
+    font-size: 14px !important; /* ✅ Smaller text */
+  }
+  
+  .cardHeader {
+    font-size: 18px !important;
+  }
+}

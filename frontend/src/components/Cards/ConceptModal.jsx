@@ -85,68 +85,68 @@ const ConceptModal = ({ language, level, onSelect, onClose }) => {
           </div>
         ) : (
           // Start
-<div className={styles.conceptCarousel}>
+        <div className={styles.conceptCarousel}>
 
-  {/* SWIPER */}
-  <Swiper
-    ref={swiperRef}
-    modules={[Navigation, Pagination, EffectCoverflow]}
-    effect="coverflow"
-    grabCursor={true}
-    centeredSlides={true}
-    slidesPerView="auto"
-    coverflowEffect={{
-      rotate: 0,
-      stretch: 0,
-      depth: 100,
-      modifier: 2.5,
-      slideShadows: true
-    }}
-    pagination={{ el: `.${styles.dotsContainer}`, clickable: true }}
-    onSlideChange={handleSlideChange}
-    className={styles.swiperContainer}
-  >
-    {filteredConcepts.map((item, index) => (
-      <SwiperSlide key={item.name} className={styles.swiperSlide}>
-        <div
-          className={styles.conceptCard}
-          onClick={() => handleConceptClick(index)}
-        >
-          <div className={styles.cardIcon}>📚</div>
-          <div className={styles.cardText}>{item.name}</div>
+          {/* SWIPER */}
+          <Swiper
+            ref={swiperRef}
+            modules={[Navigation, Pagination, EffectCoverflow]}
+            effect="coverflow"
+            grabCursor={true}
+            centeredSlides={true}
+            slidesPerView="auto"
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 100,
+              modifier: 2.5,
+              slideShadows: true
+            }}
+            pagination={{ el: `.${styles.dotsContainer}`, clickable: true }}
+            onSlideChange={handleSlideChange}
+            className={styles.swiperContainer}
+          >
+            {filteredConcepts.map((item, index) => (
+              <SwiperSlide key={item.name} className={styles.swiperSlide}>
+                <div
+                  className={styles.conceptCard}
+                  onClick={() => handleConceptClick(index)}
+                >
+                  <div className={styles.cardIcon}>📚</div>
+                  <div className={styles.cardText}>{item.name}</div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          {/* ARROWS */}
+          <div className={styles.arrowContainer}>
+            <button
+              className={styles.navArrow}
+              onClick={() => swiperRef.current.swiper.slidePrev()}
+              disabled={activeIndex === 0}
+            >
+              ←
+            </button>
+
+            <button
+              className={styles.navArrow}
+              onClick={() => swiperRef.current.swiper.slideNext()}
+              disabled={activeIndex === filteredConcepts.length - 1}
+            >
+              →
+            </button>
+          </div>
+
+          {/* DOTS */}
+          <div className={styles.dotsContainer}></div>
+
         </div>
-      </SwiperSlide>
-    ))}
-  </Swiper>
-
-  {/* ARROWS */}
-  <div className={styles.arrowContainer}>
-    <button
-      className={styles.navArrow}
-      onClick={() => swiperRef.current.swiper.slidePrev()}
-      disabled={activeIndex === 0}
-    >
-      ←
-    </button>
-
-    <button
-      className={styles.navArrow}
-      onClick={() => swiperRef.current.swiper.slideNext()}
-      disabled={activeIndex === filteredConcepts.length - 1}
-    >
-      →
-    </button>
-  </div>
-
-  {/* DOTS */}
-  <div className={styles.dotsContainer}></div>
-
-</div>
-          // end of concept carousel
-        )}
-      </div>
-    </div>
-  );
-};
+                  // end of concept carousel
+                )}
+              </div>
+            </div>
+          );
+        };
 
 export default ConceptModal;

@@ -44,11 +44,7 @@ const LanguageCards = ({ onSelect, isDarkMode, toggleTheme, onProfileClick, onHo
           <div className={styles.profileWrapper}>
             <div className={styles.profileIcon} onClick={onProfileClick}>
               {userData?.photo ? (
-                <img 
-                  src={userData.photo} 
-                  alt="Profile" 
-                  className={styles.profilePhoto}
-                />
+                <img src={userData.photo} alt="Profile" className={styles.profilePhoto}/>
               ) : (
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -57,13 +53,11 @@ const LanguageCards = ({ onSelect, isDarkMode, toggleTheme, onProfileClick, onHo
               )}
             </div>
             
-            {/* Dropdown */}
-            <div className={styles.dropdown}>
-              <div className={styles.arrowUp}></div>
-              <ul className={styles.menuList}>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); onProfileClick(); }}>Profile</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); onLogout(); }}>Log Out</a></li>
-              </ul>
+            {/* Unified Dropdown */}
+            <div className="unifiedDropdown">
+              <div className="dropdownArrow"></div>
+              <div className="dropdownItem" onClick={(e) => { e.stopPropagation(); onProfileClick(); }}>Profile</div>
+              <div className="dropdownItem" onClick={(e) => { e.stopPropagation(); onLogout(); }}>Log Out</div>
             </div>
           </div>
         </div>
